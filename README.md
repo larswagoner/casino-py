@@ -1,3 +1,1 @@
 # casino
-sup biiiitch
-brioski 
