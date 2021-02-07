@@ -1,4 +1,4 @@
-- Figuring out the table and center.
+(- Figuring out the table and center.
 
 - Dealing for rounds 2-12
 
@@ -6,3 +6,5 @@
 
 
 - error checking
+
+figure out build, take, collect, play buttons (must play min one card)

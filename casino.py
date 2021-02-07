@@ -29,6 +29,57 @@ class Player:
     def showPoints(self):
         print(self.points)
 
+center = []
+
+class Center:
+    def __init__(self):
+        self.
+
+
+class CenterPile:
+    def __init__(self):
+        self.pile = [] #to append cards to centerPile we must append to centerPile.pile
+        self.builtValue = 0
+        self.isBuilt = True
+        self.isCollect = False
+    
+    def create_empty_builtPile(self):
+        center.append(self)
+    
+    def collectCards(indexOne, )
+
+    
+def move_to_center(player, indexCard, centerPile):
+    centerPile.create_empty_builtPile()
+    center[-1].pile.append(player.hand.pop(indexCard))
+
+def moveFromCenter(player, indexCenterPile): #this should be in an if centerPile.isCollect == True statement.
+    if center[indexCenterPile].isCollect:
+        for indexCard in range(len(center[indexCenterPile].pile)):
+            player.discard.append(center[indexCenterPile].pile.pop(indexCard))
+        center.pop(indexCenterPile)
+    else:
+        print()
+
+
+    
+    
+centerPile = CenterPile()
+
+# class BuiltPile(CenterPile):
+#     def __init__(self):
+#         super().__init__
+
+
+        
+    
+# class CollectPile(CenterPile):
+#     def __init__(self):
+#         super().__init__
+        
+    
+
+
 
 
 class Card:
@@ -94,6 +145,15 @@ def compare_players(players):
         spadesWinner.points += 1
             
 
-
-
+def prettyPrint(players, center):
+    for p in players:
+        print(f"Player: {p.playerName}")
+        print(f"    Hand:")
+        for c in p.hand:
+            print(f"        {c.value} of {c.suit}")
+        print(f"    Discard:")
+        for c in p.discard:
+            print(f"        {c.value} of {c.suit}")
+        
     
+
