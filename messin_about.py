@@ -1,5 +1,6 @@
 import random
 
+
 # center, discard - odd, hand - even
 def create_table(num_players):
     table = [[]]
@@ -13,9 +14,18 @@ class Card:
     def __init__(self, suit, value):
         self.suit = suit
         self.value = value
+        self.builtValue = value
 
     def return_card(self):
         return self.suit, self.value
+    
+    def __add__(self, other):
+        self.builtValue += other.builtValue
+        return self
+
+
+
+
 
 
 def create_deck():
@@ -28,6 +38,7 @@ def create_deck():
     random.shuffle(deck)
 
     return deck
+
 
 table = create_table(2)
 deck = create_deck()
@@ -42,9 +53,21 @@ def deal_round_one(table, deck):
     return table
 
 
+def place_card(to_pile, card, from_pile):
+    table[to_pile].append(table[from_pile].pop(card % len(table[from_pile])))
+
+
 table = deal_round_one(table, deck)
 
 
+for pile in table:
+    for card in pile:
+        print(card.return_card())
+    print('--------------')
+
+place_card(1, 28, 2)
+
+print('AAAAAAAAAAA')
 for pile in table:
     for card in pile:
         print(card.return_card())

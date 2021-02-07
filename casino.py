@@ -2,6 +2,7 @@ import random
 
 class Player:
     def __init__(self, name):
+        self.playerName = name
         self.hand = []
         self.discard = []
         self.cards = 0
@@ -9,11 +10,8 @@ class Player:
         self.aces = 0
         self.smallCasino = 0
         self.bigCasino = 0
-        self.cardWinner = False
-        self.spadesWinner = False
         self.points = 0
-        self.playerName = name
-    
+        
     def show_points(self):
         print(self.points)
     
@@ -37,9 +35,16 @@ class Card:
     def __init__(self, suit, value):
         self.suit = suit
         self.value = value
+        self.builtValue = value #maybe a way we can build cards while preserving the original suit and value
 
     def return_card(self):
         return self.suit, self.value
+
+    def __add__(self, other):
+        self.builtValue += other.builtValue
+        return self
+
+
 
 def create_deck():
     suits = ['spades', 'clubs', 'diamonds', 'hearts']
@@ -50,13 +55,20 @@ def create_deck():
     random.shuffle(deck)
     return deck
 
+
 def deal_round_one(table, deck):
     for number in range(0,2):
-        for pile in table[0::2]:
-            pile.append(deck.pop(0))
-            pile.append(deck.pop(0))
+        if len(deck) == 52:
+            for pile in table[0::2]:
+                pile.append(deck.pop(0))
+                pile.append(deck.pop(0))
+        else:
+            for pile in table[1::2]:
+                pile.append(deck.pop(0))
+                pile.append(deck.pop(0))
 
     return table
+
 
 # def move_card(card, from_pile, to_pile):
 
@@ -64,9 +76,7 @@ def deal_round_one(table, deck):
 def compare_players(players):
     cardList = []
     spadesList = []
-    lastPlayerCards = 0
-    lastPlayerSpades = 0
-    
+  
     for player in players:
         playerCards, playerSpades = player.count()
         cardList.append(playerCards)
@@ -78,31 +88,8 @@ def compare_players(players):
 
     cardWinner.points += 3 
     spadesWinner.points += 1
-
-    # for player in players:
-    #     playerCards, playerSpades = player.count()
-    #     print(playerCards, playerSpades)
-        
-    #     if playerCards > lastPlayerCards:
-    #         winnerCards = player
-    #     elif playerCards == lastPlayerCards:
-    #         winnerCards.cardWinner = False
-
-    #     if playerSpades > lastPlayerSpades:
-    #         winnerSpades = player
-    #     elif playerSpades == lastPlayerSpades:
-    #         winnerSpades.spadeWinner = False
             
 
 
-    for player in players:
-        if player.cardWinner == True:
-            player.points += 3
-        if player.spadesWinner == True:
-            player.points += 1
 
-
-
-
-# def declare_winner(players):
     

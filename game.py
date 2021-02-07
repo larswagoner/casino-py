@@ -8,26 +8,29 @@ players.append(Player("Max"))
 
 deck = create_deck()
 
-for card in deck[0:5:]:
+for card in deck[0:26:]:
     players[0].discard += [card]
 
-for card in deck[6:52:]:
+for card in deck[26:53:]:
     players[1].discard += [card]
 
 
-
-
-
-
-# players[0].cards = 5
-# players[0].spades = 6
-# players[0].aces = 2
-
-# players[1].cards = 2
-# players[1].spades = 16
-# players[1].aces = 0
 
 compare_players(players)
 
 for player in players:
     player.show_points();
+
+
+# firstCard = players[0].discard[0]
+# secondCard = players[0].discard[1]
+
+
+
+# builtCard = firstCard + secondCard
+
+# second = secondCard + builtCard + firstCard
+
+# print(firstCard.builtValue, 
+# secondCard.builtValue,
+# builtCard.builtValue, second.builtValue)
