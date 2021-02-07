@@ -8,3 +8,12 @@
 - error checking
 
 figure out build, take, collect, play buttons (must play min one card)
+
+- redo implementation more carefully
+    - add center class (center -> class.list)
+    - get rid of isCollect to just isBuilt
+    - make collect and build
+        - still don't know why not built doesn't work 
+    - discard pile wasn't working in previous version
+    - finish pretty print lol
+
