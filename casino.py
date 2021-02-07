@@ -82,12 +82,16 @@ def compare_players(players):
         cardList.append(playerCards)
         spadesList.append(playerSpades)
     
+    highestCards = [total for total in cardList if total == max(cardList)]
+    highestSpades = [total for total in spadesList if total == max(spadesList)]
 
-    cardWinner = players[cardList.index(max(cardList))]
-    spadesWinner = players[spadesList.index(max(spadesList))]
-
-    cardWinner.points += 3 
-    spadesWinner.points += 1
+    if len(highestCards) == 1:
+        cardWinner = players[cardList.index(max(cardList))]
+        cardWinner.points += 3 
+    
+    if len(highestSpades) == 1:
+        spadesWinner = players[spadesList.index(max(spadesList))]
+        spadesWinner.points += 1
             
 
 

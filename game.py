@@ -8,10 +8,10 @@ players.append(Player("Max"))
 
 deck = create_deck()
 
-for card in deck[0:26:]:
+for card in deck[0:33:]:
     players[0].discard += [card]
 
-for card in deck[26:53:]:
+for card in deck[1:2:]:
     players[1].discard += [card]
 
 
