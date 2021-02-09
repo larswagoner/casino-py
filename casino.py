@@ -45,18 +45,20 @@ class Center:
     def buildCards(self, indexOne, indexTwo, player):
         temp = False
         newBuiltValue = (center.pile[indexOne].builtValue + center.pile[indexTwo].builtValue)
+        print(center.pile[indexOne].builtValue, center.pile[indexTwo].builtValue, newBuiltValue)
         for i in range(len(player.hand)):
             if newBuiltValue == player.hand[i].value:
                 temp = True
                 break
-            
+        
         if center.pile[indexOne].isBuilt and center.pile[indexTwo].isBuilt and temp:
             for i in range(len(center.pile[indexOne].pile)):
+                print('pop')
                 self.pile[indexTwo].pile.append(self.pile[indexOne].pile.pop(0))
 
         
-            self.pile[indexTwo].builtValue = newBuiltValue
-            self.pile[indexTwo].collectValue = newBuiltValue
+            # self.pile[indexTwo].builtValue = newBuiltValue
+            # self.pile[indexTwo].collectValue = newBuiltValue
             self.pile.pop(indexOne)
         else:
             print("NEIN")
@@ -64,11 +66,11 @@ class Center:
 
     def collectCards(self, indexOne, indexTwo):
         if self.pile[indexOne].collectValue == self.pile[indexTwo].collectValue:
-            for i in range(len(center.pile[indexOne])):
-                self.pile[indexTwo].append(self.pile[indexOne].pop(0))
+            for i in range(len(center.pile[indexOne].pile)):
+                self.pile[indexTwo].pile.append(self.pile[indexOne].pile.pop(0))
 
-            self.pile.pop(indexOne)
             self.pile[indexTwo].isBuilt = False
+            self.pile.pop(indexOne)
         else:
             print("NEIN")
 
@@ -152,10 +154,10 @@ def moveFromCenter(player, indexCenterPile):
         if card.wasLastPlayed:
             temp = True
             break
-        
+
     if not center.pile[indexCenterPile].isBuilt and temp:
         for indexCard in range(len(center.pile[indexCenterPile].pile)):
-            player.discard.append(center.pile[indexCenterPile].pile[indexCenterPile])
+            player.discard.append(center.pile[indexCenterPile].pile.pop(indexCenterPile))
         center.pile.pop(indexCenterPile)
     else:
         print("NEIN")
@@ -190,7 +192,7 @@ def prettyPrint(players, centerList):
         print(f"Player: {p.playerName}")
         print(f"    Hand:")
         for card in p.hand:
-            print(f"        {card.value} of {card.suit}")
+            print(f"        {card.value} of {card.suit}. %d" % card.builtValue)
         print(f"    Discard:")
         for discardCard in p.discard:
             print(f"        {discardCard.value} of {discardCard.suit}")
@@ -198,7 +200,7 @@ def prettyPrint(players, centerList):
     
     print("Center:")
     for pile in centerList:
-        print("    Pile:")
+        print("    Pile:  %d" % pile.builtValue)
         for c in pile.pile:
             print(f"        {c.value} of {c.suit}")
     print("#################################")
