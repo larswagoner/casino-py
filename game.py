@@ -15,22 +15,19 @@ players.append(Player("Max"))
 
 deck = create_deck()
 
+dealCards(deck, players)
 
-for player in players:
-    for i in range(4):
-        player.hand.append(deck.pop(0))
+dealCards(deck, players)
+dealCards(deck, players)
+dealCards(deck, players)
+dealCards(deck, players)
+dealCards(deck, players)
+dealCards(deck, players)
+dealCards(deck, players)
 
 
-deal_to_center(deck, 4)
+
+center.buildCards(0, 1, players[0])
 
 prettyPrint(players, center.pile)
 
-center.pile[0].isBuilt = False
-moveFromCenter(players[0], 0)
-
-prettyPrint(players, center.pile)
-
-compare_players(players)
-
-for player in players:
-    player.show_points()

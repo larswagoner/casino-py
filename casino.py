@@ -42,17 +42,18 @@ class Center:
         self.pile = []
         
 
-    def buildCards(indexOne, indexTwo, player):
+    def buildCards(self, indexOne, indexTwo, player):
         temp = False
         newBuiltValue = (center.pile[indexOne].builtValue + center.pile[indexTwo].builtValue)
+        # print(center.pile[indexOne].builtValue, center.pile[indexTwo].builtValue, newBuiltValue)
         for i in range(len(player.hand)):
-            if newBuiltBV == player.hand[i].value:
+            if newBuiltValue == player.hand[i].value:
                 temp = True
                 break
             
         if center.pile[indexOne].isBuilt and center.pile[indexTwo].isBuilt and temp:
-            for i in range(len(center.pile[indexOne])):
-                self.pile[indexTwo].append(self.pile[indexOne].pop(0))
+            for i in range(len(center.pile[indexOne].pile)):
+                self.pile[indexTwo].pile.append(self.pile[indexOne].pile.pop(0))
 
         
             self.pile[indexTwo].builtValue = newBuiltValue
@@ -62,7 +63,7 @@ class Center:
             print("NEIN")
         
 
-    def collectCards(indexOne, indexTwo):
+    def collectCards(self, indexOne, indexTwo):
         if self.pile[indexOne].collectValue == self.pile[indexTwo].collectValue:
             for i in range(len(center.pile[indexOne])):
                 self.pile[indexTwo].append(self.pile[indexOne].pop(0))
@@ -111,6 +112,28 @@ def deal_to_center(deck, numCards):
     for i in range(numCards):
         center.pile.append(CenterPile())
         center.pile[-1].pile.append(deck.pop(0))
+        center.pile[-1].builtValue = center.pile[-1].pile[0].builtValue
+
+
+
+def deal_to_player(deck, player, numCards):
+    for i in range(numCards):
+            player.hand.append(deck.pop(0))
+
+
+
+def dealCards(deck, players):
+    if deck:
+        if len(deck) == 52:
+                for player in players:
+                    deal_to_player(deck, player, 2)
+                deal_to_center(deck, 4)
+
+        else:
+            for player in players:
+                    deal_to_player(deck, player, 2)
+    else: 
+        print('This round has ended')
 
 
 
@@ -128,7 +151,7 @@ def moveFromCenter(player, indexCenterPile):
             player.discard.append(center.pile[indexCenterPile].pile[indexCenterPile])
         center.pile.pop(indexCenterPile)
     else:
-        print("noo")
+        print("NEIN")
 
 
 
