@@ -25,9 +25,7 @@ class Player:
         
         self.points += (self.aces + self.smallCasino + self.bigCasino)
         return self.cards, self.spades
-        
-    def showPoints(self):
-        print(self.points)
+
 
 
 class CenterPile:
@@ -42,8 +40,7 @@ class CenterPile:
 class Center:
     def __init__(self):
         self.pile = []
-        # for i in range(4):
-        #     self.pile.append(CenterPile())
+        
 
     def buildCards(indexOne, indexTwo, player):
         temp = False
@@ -64,6 +61,7 @@ class Center:
         else:
             print("NEIN")
         
+
     def collectCards(indexOne, indexTwo):
         if self.pile[indexOne].collectValue == self.pile[indexTwo].collectValue:
             for i in range(len(center.pile[indexOne])):
@@ -73,45 +71,6 @@ class Center:
             self.pile[indexTwo].isBuilt = False
         else:
             print("NEIN")
-
-
-
-center = Center()
-    
-centerPile = CenterPile()
-    
-def move_to_center(player, indexCard):
-    center.pile.append(CenterPile())
-    
-    center.pile[-1].pile.append(player.hand.pop(indexCard))
-    center.pile[-1].builtValue += center.pile[-1].pile[0].builtValue
-
-
-
-def deal_to_center(deck, numCards, centerPile):
-    for i in range(numCards):
-        center.pile.append(CenterPile)
-        center.pile[-1].pile.append(deck[0])
-
-   
-
-def moveFromCenter(player, indexCenterPile):
-    if not center.pile[indexCenterPile].isBuilt:
-        for indexCard in range(len(center.pile[indexCenterPile].pile)):
-            player.discard.append(center.pile[indexCenterPile].pile[indexCenterPile])
-        center.pile.pop(indexCenterPile)
-    else:
-        print("noo")
-
-
-
-
-
-center = Center()
-    
-centerPile = CenterPile()
-
-    
 
 
 
@@ -126,6 +85,16 @@ class Card:
 
 
 
+##################
+##################
+#GLOBAL FUNCTIONS#
+##################
+##################
+
+
+center = Center()
+
+
 
 def create_deck():
     suits = ['spades', 'clubs', 'diamonds', 'hearts']
@@ -136,6 +105,30 @@ def create_deck():
     random.shuffle(deck)
     return deck
 
+
+
+def deal_to_center(deck, numCards):
+    for i in range(numCards):
+        center.pile.append(CenterPile())
+        center.pile[-1].pile.append(deck.pop(0))
+
+
+
+def move_to_center(player, indexCard):
+    center.pile.append(CenterPile())
+    
+    center.pile[-1].pile.append(player.hand.pop(indexCard))
+    center.pile[-1].builtValue += center.pile[-1].pile[0].builtValue
+
+
+
+def moveFromCenter(player, indexCenterPile):
+    if not center.pile[indexCenterPile].isBuilt:
+        for indexCard in range(len(center.pile[indexCenterPile].pile)):
+            player.discard.append(center.pile[indexCenterPile].pile[indexCenterPile])
+        center.pile.pop(indexCenterPile)
+    else:
+        print("noo")
 
 
 
@@ -159,6 +152,7 @@ def compare_players(players):
         spadesWinner = players[spadesList.index(max(spadesList))]
         spadesWinner.points += 1
             
+
 
 def prettyPrint(players, centerList):
     for p in players:

@@ -20,10 +20,8 @@ for player in players:
     for i in range(4):
         player.hand.append(deck.pop(0))
 
-prettyPrint(players, center.pile)
 
-move_to_center(players[0], 0)
-move_to_center(players[0], 2)
+deal_to_center(deck, 4)
 
 prettyPrint(players, center.pile)
 
