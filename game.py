@@ -1,42 +1,38 @@
 from casino import *
 
 
+# 1. empty builtpile
+# 2. pop a card from player hand -> created builtpile 
+
+
 
 
 players = []
 players.append(Player("Lars"))
 players.append(Player("Max"))
 
+
+
 deck = create_deck()
 
-for card in deck[0:4:]:
-    players[0].hand += [card]
 
-for card in deck[4:8:]:
-    players[1].hand += [card]
+for player in players:
+    for i in range(4):
+        player.hand.append(deck.pop(0))
 
+prettyPrint(players, center.pile)
 
+move_to_center(players[0], 0)
+move_to_center(players[0], 2)
 
+prettyPrint(players, center.pile)
 
-
-for card in players[0].hand:
-   print(card.return_card())
- 
-
-
-move_to_center(players[0], 3, centerPile)
-
-print('----------------------')
-
-print(center[0].pile[0].return_card())
-
-print('----------------------')
-
-for card in players[0].hand:
-   print(card.return_card())
-
+center.pile[0].isBuilt = False
 moveFromCenter(players[0], 0)
 
-print('----------------------')
+prettyPrint(players, center.pile)
 
-print(players[0].discard[0].return_card())
+compare_players(players)
+
+for player in players:
+    player.show_points()

@@ -29,56 +29,89 @@ class Player:
     def showPoints(self):
         print(self.points)
 
-center = []
-
-# class Center:
-#     def __init__(self):
-#         self.
-
 
 class CenterPile:
     def __init__(self):
         self.pile = [] #to append cards to centerPile we must append to centerPile.pile
-        self.builtValue = 0
+        self.builtValue = 0 
+        self.collectValue = self.builtValue
         self.isBuilt = True
-        self.isCollect = False
     
-    def create_empty_builtPile(self):
-        center.append(self)
-    
-    # def collectCards(indexOne, )
 
-    
-def move_to_center(player, indexCard, centerPile):
-    centerPile.create_empty_builtPile()
-    center[-1].pile.append(player.hand.pop(indexCard))
 
-def moveFromCenter(player, indexCenterPile): #this should be in an if centerPile.isCollect == True statement.
-    if center[indexCenterPile].isCollect:
-        for indexCard in range(len(center[indexCenterPile].pile)):
-            player.discard.append(center[indexCenterPile].pile.pop(indexCard))
-        center.pop(indexCenterPile)
+class Center:
+    def __init__(self):
+        self.pile = []
+        # for i in range(4):
+        #     self.pile.append(CenterPile())
+
+    def buildCards(indexOne, indexTwo, player):
+        temp = False
+        newBuiltValue = (center.pile[indexOne].builtValue + center.pile[indexTwo].builtValue)
+        for i in range(len(player.hand)):
+            if newBuiltBV == player.hand[i].value:
+                temp = True
+                break
+            
+        if center.pile[indexOne].isBuilt and center.pile[indexTwo].isBuilt and temp:
+            for i in range(len(center.pile[indexOne])):
+                self.pile[indexTwo].append(self.pile[indexOne].pop(0))
+
+        
+            self.pile[indexTwo].builtValue = newBuiltValue
+            self.pile[indexTwo].collectValue = newBuiltValue
+            self.pile.pop(indexOne)
+        else:
+            print("NEIN")
+        
+    def collectCards(indexOne, indexTwo):
+        if self.pile[indexOne].collectValue == self.pile[indexTwo].collectValue:
+            for i in range(len(center.pile[indexOne])):
+                self.pile[indexTwo].append(self.pile[indexOne].pop(0))
+
+            self.pile.pop(indexOne)
+            self.pile[indexTwo].isBuilt = False
+        else:
+            print("NEIN")
+
+
+
+center = Center()
+    
+centerPile = CenterPile()
+    
+def move_to_center(player, indexCard):
+    center.pile.append(CenterPile())
+    
+    center.pile[-1].pile.append(player.hand.pop(indexCard))
+    center.pile[-1].builtValue += center.pile[-1].pile[0].builtValue
+
+
+
+def deal_to_center(deck, numCards, centerPile):
+    for i in range(numCards):
+        center.pile.append(CenterPile)
+        center.pile[-1].pile.append(deck[0])
+
+   
+
+def moveFromCenter(player, indexCenterPile):
+    if not center.pile[indexCenterPile].isBuilt:
+        for indexCard in range(len(center.pile[indexCenterPile].pile)):
+            player.discard.append(center.pile[indexCenterPile].pile[indexCenterPile])
+        center.pile.pop(indexCenterPile)
     else:
-        print()
+        print("noo")
 
 
-    
+
+
+
+center = Center()
     
 centerPile = CenterPile()
 
-# class BuiltPile(CenterPile):
-#     def __init__(self):
-#         super().__init__
-
-
-        
     
-# class CollectPile(CenterPile):
-#     def __init__(self):
-#         super().__init__
-        
-    
-
 
 
 
@@ -86,14 +119,11 @@ class Card:
     def __init__(self, suit, value):
         self.suit = suit
         self.value = value
-        self.builtValue = value #maybe a way we can build cards while preserving the original suit and value
+        self.builtValue = value 
 
     def return_card(self):
         return self.suit, self.value
 
-    def __add__(self, other):
-        self.builtValue += other.builtValue
-        return self
 
 
 
@@ -107,21 +137,6 @@ def create_deck():
     return deck
 
 
-def deal_round_one(table, deck):
-    for number in range(0,2):
-        if len(deck) == 52:
-            for pile in table[0::2]:
-                pile.append(deck.pop(0))
-                pile.append(deck.pop(0))
-        else:
-            for pile in table[1::2]:
-                pile.append(deck.pop(0))
-                pile.append(deck.pop(0))
-
-    return table
-
-
-# def move_card(card, from_pile, to_pile):
 
 
 def compare_players(players):
@@ -145,12 +160,21 @@ def compare_players(players):
         spadesWinner.points += 1
             
 
-# def prettyPrint(players, center):
-#     for p in players:
-#         print(f"Player: {p.playerName}")
-#         print(f"    Hand:")
-#         for c in p.hand:
-#             print(f"        {c.value} of {c.suit}")
-#         print(f"    Discard:")
-#         for c in p.discard:
-#             print(f"        {c.value} of {c.suit}")
+def prettyPrint(players, centerList):
+    for p in players:
+    
+        print(f"Player: {p.playerName}")
+        print(f"    Hand:")
+        for card in p.hand:
+            print(f"        {card.value} of {card.suit}")
+        print(f"    Discard:")
+        for discardCard in p.discard:
+            print(f"        {discardCard.value} of {discardCard.suit}")
+        print(f"-----------------------------")
+    
+    print("Center:")
+    for pile in centerList:
+        print("    Pile:")
+        for c in pile.pile:
+            print(f"        {c.value} of {c.suit}")
+    print("#################################")
