@@ -45,7 +45,6 @@ class Center:
     def buildCards(self, indexOne, indexTwo, player):
         temp = False
         newBuiltValue = (center.pile[indexOne].builtValue + center.pile[indexTwo].builtValue)
-        # print(center.pile[indexOne].builtValue, center.pile[indexTwo].builtValue, newBuiltValue)
         for i in range(len(player.hand)):
             if newBuiltValue == player.hand[i].value:
                 temp = True
@@ -80,6 +79,7 @@ class Card:
         self.suit = suit
         self.value = value
         self.builtValue = value 
+        self.wasLastPlayed = False #at the end of each turn, all of the .wasLastPlayed values should be set to False
 
     def return_card(self):
         return self.suit, self.value
@@ -142,11 +142,18 @@ def move_to_center(player, indexCard):
     
     center.pile[-1].pile.append(player.hand.pop(indexCard))
     center.pile[-1].builtValue += center.pile[-1].pile[0].builtValue
+    center.pile[-1].pile[0].wasLastPlayed = True
 
 
 
 def moveFromCenter(player, indexCenterPile):
-    if not center.pile[indexCenterPile].isBuilt:
+    temp = False
+    for card in center.pile[indexCenterPile].pile:
+        if card.wasLastPlayed:
+            temp = True
+            break
+        
+    if not center.pile[indexCenterPile].isBuilt and temp:
         for indexCard in range(len(center.pile[indexCenterPile].pile)):
             player.discard.append(center.pile[indexCenterPile].pile[indexCenterPile])
         center.pile.pop(indexCenterPile)
