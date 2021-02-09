@@ -29,21 +29,21 @@ center.pile[1].pile[0].value = 4
 center.pile[1].builtValue = 4
 center.pile[2].pile[0].value = 7
 center.pile[2].builtValue = 7
-prettyPrint(players, center.pile)
+center.pile[2].collectValue = 7
 
 center.buildCards(0, 1, players[0])
 center.collectCards(0, 1)
 
-prettyPrint(players, center.pile)
+
 
 move_to_center(players[0], 0)
+
 center.collectCards(0, 1)
 
 
 moveFromCenter(players[0], 0)
 
 prettyPrint(players, center.pile)
-
 compare_players(players)
 
 for player in players:

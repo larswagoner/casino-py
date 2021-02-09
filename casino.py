@@ -30,7 +30,7 @@ class Player:
 
 class CenterPile:
     def __init__(self):
-        self.pile = [] #to append cards to centerPile we must append to centerPile.pile
+        self.pile = [] 
         self.builtValue = 0 
         self.collectValue = self.builtValue
         self.isBuilt = True
@@ -45,7 +45,6 @@ class Center:
     def buildCards(self, indexOne, indexTwo, player):
         temp = False
         newBuiltValue = (center.pile[indexOne].builtValue + center.pile[indexTwo].builtValue)
-        print(center.pile[indexOne].builtValue, center.pile[indexTwo].builtValue, newBuiltValue)
         for i in range(len(player.hand)):
             if newBuiltValue == player.hand[i].value:
                 temp = True
@@ -53,12 +52,11 @@ class Center:
         
         if center.pile[indexOne].isBuilt and center.pile[indexTwo].isBuilt and temp:
             for i in range(len(center.pile[indexOne].pile)):
-                print('pop')
                 self.pile[indexTwo].pile.append(self.pile[indexOne].pile.pop(0))
 
         
-            # self.pile[indexTwo].builtValue = newBuiltValue
-            # self.pile[indexTwo].collectValue = newBuiltValue
+            self.pile[indexTwo].builtValue = newBuiltValue
+            self.pile[indexTwo].collectValue = newBuiltValue
             self.pile.pop(indexOne)
         else:
             print("NEIN")
@@ -144,6 +142,7 @@ def move_to_center(player, indexCard):
     
     center.pile[-1].pile.append(player.hand.pop(indexCard))
     center.pile[-1].builtValue += center.pile[-1].pile[0].builtValue
+    center.pile[-1].collectValue += center.pile[-1].pile[0].builtValue
     center.pile[-1].pile[0].wasLastPlayed = True
 
 
