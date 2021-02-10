@@ -157,14 +157,19 @@ def move_to_center(player, indexCard):
 
 def moveFromCenter(player, indexCenterPile):
     temp = False
+    print('Aloha', indexCenterPile)
     for card in center.pile[indexCenterPile].pile:
+        print('continue on soldier')
         if card.wasLastPlayed:
             temp = True
+           
             break
 
     if not center.pile[indexCenterPile].isBuilt and temp:
-        for indexCard in range(len(center.pile[indexCenterPile].pile)):
-            player.discard.append(center.pile[indexCenterPile].pile.pop(indexCenterPile))
+        print("aloha from inside if")
+
+        while center.pile[indexCenterPile].pile: #range(len(center.pile[indexCenterPile].pile)):
+            player.discard.append(center.pile[indexCenterPile].pile.pop(0))
         center.pile.pop(indexCenterPile)
     else:
         print("NEIN")
@@ -213,16 +218,27 @@ def playersTurn(player):
     testPrint(player, center.pile)
     action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
 
+    temp = 0
+    isRunning = True
+
     try:
-        while 'end' not in action: 
-            print('before buildinggggggggg')
+        while isRunning: 
+
+            if 'end' in action and temp == 1:
+                isRunning = False
+                print("don't end before playing you sneaky whore")
+                break
             
             if 'play' in action:
+                if temp > 1:
+                    print('you cant do that you sneaky whore')
+                    break
                 play, card = action.split()
                 if int(card) > (len(player.hand) - 1):
                     print("range error, try again!")
                 else:
                     move_to_center(player, int(card))
+                    temp += 1
             elif 'build' in action:
                 build, pileOne, pileTwo = action.split()
                 print('please dont be broken', pileOne, pileTwo)
@@ -243,6 +259,7 @@ def playersTurn(player):
             testPrint(player, center.pile)
             action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
     except:
+        print(sys.exc_info()[0])
         print("ye fookin done")
 
     print("Next person's turn...")
@@ -272,6 +289,7 @@ def testPrint(player, center):
     print(f"{player.name}'s Cards: ")
     for card in player.hand:
         print(f"        {card.value} of {card.suit}")
+    print('There are %d cards in the discard pile.' % len(player.discard))
     print("Center:")
     for pile in center:
         print(f"    Pile: Collect: {pile.collectValue}. Build: {pile.builtValue}.") # % pile.builtValue)
