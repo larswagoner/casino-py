@@ -1,12 +1,5 @@
 from casino import *
 
-
-# 1. empty builtpile
-# 2. pop a card from player hand -> created builtpile 
-
-
-
-
 players = []
 players.append(Player("Lars"))
 players.append(Player("Max"))
