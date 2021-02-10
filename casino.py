@@ -94,7 +94,6 @@ class Card:
 
 
 
-center = Center()
 
 
 
@@ -114,6 +113,7 @@ def deal_to_center(deck, numCards):
         center.pile.append(CenterPile())
         center.pile[-1].pile.append(deck.pop(0))
         center.pile[-1].builtValue = center.pile[-1].pile[0].builtValue
+        center.pile[-1].collectValue = center.pile[-1].pile[0].builtValue
 
 
 
@@ -129,7 +129,6 @@ def dealCards(deck, players):
                 for i in range(2):
                     for player in players:
                         deal_to_player(deck, player, 2)
-
                 deal_to_center(deck, 4)
 
         else:
@@ -188,6 +187,58 @@ def compare_players(players):
         spadesWinner.points += 1
             
 
+def setup():
+    players = []
+    deck = create_deck()
+    center = Center()
+
+    numPlayers = int(input('Enter how many players: '))
+    for i in range(numPlayers):
+        playername = input('Enter your name: ')
+        players.append(Player(playername))
+    
+    return players, deck, center
+
+players, deck, center = setup()
+
+def playersTurn(player):
+    testPrint(player, center.pile)
+    action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
+    temp = 0
+    
+    if 'play' in action:
+        temp += 1
+        
+    while 'end' not in action and not temp > 1:       
+        if 'play' in action:
+            temp += 1
+            play, card = action.split()
+            if int(card) > (len(player.hand) - 1):
+                print("range error, try again!")
+            else:
+                move_to_center(player, int(card))
+
+        elif 'build' in action:
+            build, pileOne, pileTwo = action.split()
+            center.buildCards(int(pileOne), int(pileTwo), player)
+
+        elif 'collect' in action:
+            collect, cardOne, cardTwo = action.split()
+            print(cardOne, cardTwo)
+            center.collectCards(int(cardOne), int(cardTwo))
+
+        elif 'take' in action:
+            take, pile = action.split()
+            moveFromCenter(player, int(pile))
+        
+        else:
+            print('invalid command or play a goddamn card')
+
+        testPrint(player, center.pile)
+        action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
+    print("Next person's turn...")
+
+
 
 def prettyPrint(players, centerList):
     for p in players:
@@ -214,7 +265,7 @@ def testPrint(player, center):
         print(f"        {card.value} of {card.suit}")
     print("Center:")
     for pile in center:
-        print("    Pile:")# % pile.builtValue)
+        print(f"    Pile: {pile.collectValue}") # % pile.builtValue)
         for card in pile.pile:
             print(f"        {card.value} of {card.suit}")
 
