@@ -2,7 +2,7 @@ import random
 
 class Player:
     def __init__(self, name):
-        self.playerName = name
+        self.name = name
         self.hand = []
         self.discard = []
         self.cards = 0
@@ -126,13 +126,16 @@ def deal_to_player(deck, player, numCards):
 def dealCards(deck, players):
     if deck:
         if len(deck) == 52:
-                for player in players:
-                    deal_to_player(deck, player, 2)
+                for i in range(2):
+                    for player in players:
+                        deal_to_player(deck, player, 2)
+
                 deal_to_center(deck, 4)
 
         else:
-            for player in players:
-                    deal_to_player(deck, player, 2)
+            for i in range(2):
+                    for player in players:
+                        deal_to_player(deck, player, 2)
     else: 
         print('This round has ended')
 
@@ -189,10 +192,10 @@ def compare_players(players):
 def prettyPrint(players, centerList):
     for p in players:
     
-        print(f"Player: {p.playerName}")
+        print(f"Player: {p.name}")
         print(f"    Hand:")
         for card in p.hand:
-            print(f"        {card.value} of {card.suit}. %d" % card.builtValue)
+            print(f"        {card.value} of {card.suit}")#". %d" % card.builtValue)
         print(f"    Discard:")
         for discardCard in p.discard:
             print(f"        {discardCard.value} of {discardCard.suit}")
@@ -200,7 +203,21 @@ def prettyPrint(players, centerList):
     
     print("Center:")
     for pile in centerList:
-        print("    Pile:  %d" % pile.builtValue)
+        print("    Pile:")# % pile.builtValue)
         for c in pile.pile:
             print(f"        {c.value} of {c.suit}")
     print("#################################")
+
+def testPrint(player, center):
+    print(f"{player.name}'s Cards: ")
+    for card in player.hand:
+        print(f"        {card.value} of {card.suit}")
+    print("Center:")
+    for pile in center:
+        print("    Pile:")# % pile.builtValue)
+        for card in pile.pile:
+            print(f"        {card.value} of {card.suit}")
+
+
+
+

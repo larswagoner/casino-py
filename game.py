@@ -1,44 +1,73 @@
 from casino import *
 
-players = []
-players.append(Player("Lars"))
-players.append(Player("Max"))
+
+# 1. Create deck, and players
+# 2. Game play, big ol while loop
+# 3. Compare players
+# 4. Print winner
 
 
 
-deck = create_deck()
 
 
-deal_to_center(deck,3)
+def setup():
+    deck = create_deck()
+    players = []
 
-deal_to_player(deck, players[0], 1)
-players[0].hand[0].value = 7
-players[0].hand[0].builtValue = 7
+    numPlayers = int(input('Enter how many players: '))
+    for i in range(numPlayers):
+        playername = input('Enter your name: ')
+        players.append(Player(playername))
+    
+    return deck, players
+
+def playersTurn(player):
+    action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
+
+    while "end" not in action:
+
+        if 'play' in action:
+            play, card = action.split()
+            move_to_center(player, int(card))
+
+        elif 'build' in action:
+            build, pileOne, pileTwo = action.split()
+            center.buildCards(int(pileOne), int(pileTwo), player)
+
+        elif 'collect' in action:
+            collect, cardOne, cardTwo = action.split()
+            center.collectCards(int(cardOne), int(cardTwo))
+
+        elif 'take' in action:
+            take, pile = action.split()
+            moveFromCenter(player, int(pile))
+
+        testPrint(player, center.pile)
+        action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
 
 
-center.pile[0].pile[0].value = 3
-center.pile[0].builtValue = 3
-center.pile[1].pile[0].value = 4
-center.pile[1].builtValue = 4
-center.pile[2].pile[0].value = 7
-center.pile[2].builtValue = 7
-center.pile[2].collectValue = 7
+deck, players = setup()
 
-center.buildCards(0, 1, players[0])
-center.collectCards(0, 1)
+count = 0;
 
 
 
-move_to_center(players[0], 0)
 
-center.collectCards(0, 1)
+# Game loop
+while deck:
+    if count % (4 * len(players)) == 0:# and players[-1].hand:
+        dealCards(deck, players)
 
+    player = players[count % len(players)]
 
-moveFromCenter(players[0], 0)
+    
+    for pile in center.pile:
+        for card in pile.pile:
+            card.wasLastPlayed = False
+    
 
-prettyPrint(players, center.pile)
-compare_players(players)
+    playersTurn(player, center.pile)
 
-for player in players:
-    player.show_points()
+    count += 1
+
 
