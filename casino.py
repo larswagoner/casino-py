@@ -242,8 +242,9 @@ def playersTurn(player):
 
             testPrint(player, center.pile)
             action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
-        except:
-            print("whoopsies ;)")
+    except:
+        print("ye fookin done")
+
     print("Next person's turn...")
 
 
