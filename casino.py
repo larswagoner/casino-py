@@ -1,4 +1,5 @@
 import random
+import sys
 
 class Player:
     def __init__(self, name):
@@ -43,13 +44,16 @@ class Center:
         
 
     def buildCards(self, indexOne, indexTwo, player):
+        print("in buildCards")
         temp = False
         newBuiltValue = (center.pile[indexOne].builtValue + center.pile[indexTwo].builtValue)
         for i in range(len(player.hand)):
             if newBuiltValue == player.hand[i].value:
                 temp = True
+                print("TESTICLES")
                 break
         
+        print("TESTIES")
         if center.pile[indexOne].isBuilt and center.pile[indexTwo].isBuilt and temp:
             for i in range(len(center.pile[indexOne].pile)):
                 self.pile[indexTwo].pile.append(self.pile[indexOne].pile.pop(0))
@@ -147,6 +151,7 @@ def move_to_center(player, indexCard):
     center.pile[-1].builtValue += center.pile[-1].pile[0].builtValue
     center.pile[-1].collectValue += center.pile[-1].pile[0].builtValue
     center.pile[-1].pile[0].wasLastPlayed = True
+    center.pile[-1].pile[0].isBuilt = True
 
 
 
@@ -190,7 +195,7 @@ def compare_players(players):
 def setup():
     players = []
     deck = create_deck()
-    center = Center()
+    # center = Center()
     count = 0
 
     numPlayers = int(input('Enter how many players: '))
@@ -198,30 +203,29 @@ def setup():
         playername = input('Enter your name: ')
         players.append(Player(playername))
     
-    return players, deck, center, count
+    return players, deck, count
 
-players, deck, center, count = setup()
+players, deck, count = setup()
+
+center = Center()
 
 def playersTurn(player):
     testPrint(player, center.pile)
     action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
-    temp = 0
-    
-    if 'play' in action:
-        temp += 1
-        
-    while 'end' not in action and not temp > 1:
-        try:
+
+    try:
+        while 'end' not in action: 
+            print('before buildinggggggggg')
+            
             if 'play' in action:
-                temp += 1
                 play, card = action.split()
                 if int(card) > (len(player.hand) - 1):
                     print("range error, try again!")
                 else:
                     move_to_center(player, int(card))
-
             elif 'build' in action:
                 build, pileOne, pileTwo = action.split()
+                print('please dont be broken', pileOne, pileTwo)
                 center.buildCards(int(pileOne), int(pileTwo), player)
 
             elif 'collect' in action:
@@ -235,11 +239,11 @@ def playersTurn(player):
             
             else:
                 print('invalid command or play a goddamn card')
-        except:
-            print("woopsies")
 
-        testPrint(player, center.pile)
-        action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
+            testPrint(player, center.pile)
+            action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
+        except:
+            print("whoopsies ;)")
     print("Next person's turn...")
 
 
@@ -269,10 +273,41 @@ def testPrint(player, center):
         print(f"        {card.value} of {card.suit}")
     print("Center:")
     for pile in center:
-        print(f"    Pile: Collect:{pile.collectValue} Build: {pile.builtValue}") # % pile.builtValue)
+        print(f"    Pile: Collect: {pile.collectValue}. Build: {pile.builtValue}.") # % pile.builtValue)
         for card in pile.pile:
             print(f"        {card.value} of {card.suit}")
 
 
 
 
+##################
+##################
+#####GAME.PY######
+##################
+##################
+
+
+while deck:
+    if count % (4 * len(players)) == 0 and len(players[-1].hand) == 0:
+        dealCards(deck, players)
+
+    player = players[count % len(players)]
+
+    
+    for pile in center.pile:
+        for card in pile.pile:
+            card.wasLastPlayed = False
+    
+    try:
+        playersTurn(player)
+    except:
+        print(sys.exc_info()[0])
+        print("---------there was an error---------")
+
+
+    count += 1
+
+compare_players(players)
+
+for player in players:
+    player.show_points
