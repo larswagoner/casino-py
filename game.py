@@ -6,19 +6,11 @@ from casino import *
 # 3. Compare players
 # 4. Print winner
 
-
-
-
-
-
-
-
-count = 0;
-
-
 # Game loop
+
+
 while deck:
-    if count % (4 * len(players)) == 0: # and players[-1].hand:
+    if count % (4 * len(players)) == 0 and len(players[-1].hand) == 0:
         dealCards(deck, players)
 
     player = players[count % len(players)]

@@ -191,15 +191,16 @@ def setup():
     players = []
     deck = create_deck()
     center = Center()
+    count = 0
 
     numPlayers = int(input('Enter how many players: '))
     for i in range(numPlayers):
         playername = input('Enter your name: ')
         players.append(Player(playername))
     
-    return players, deck, center
+    return players, deck, center, count
 
-players, deck, center = setup()
+players, deck, center, count = setup()
 
 def playersTurn(player):
     testPrint(player, center.pile)
@@ -209,30 +210,33 @@ def playersTurn(player):
     if 'play' in action:
         temp += 1
         
-    while 'end' not in action and not temp > 1:       
-        if 'play' in action:
-            temp += 1
-            play, card = action.split()
-            if int(card) > (len(player.hand) - 1):
-                print("range error, try again!")
+    while 'end' not in action and not temp > 1:
+        try:
+            if 'play' in action:
+                temp += 1
+                play, card = action.split()
+                if int(card) > (len(player.hand) - 1):
+                    print("range error, try again!")
+                else:
+                    move_to_center(player, int(card))
+
+            elif 'build' in action:
+                build, pileOne, pileTwo = action.split()
+                center.buildCards(int(pileOne), int(pileTwo), player)
+
+            elif 'collect' in action:
+                collect, cardOne, cardTwo = action.split()
+                print(cardOne, cardTwo)
+                center.collectCards(int(cardOne), int(cardTwo))
+
+            elif 'take' in action:
+                take, pile = action.split()
+                moveFromCenter(player, int(pile))
+            
             else:
-                move_to_center(player, int(card))
-
-        elif 'build' in action:
-            build, pileOne, pileTwo = action.split()
-            center.buildCards(int(pileOne), int(pileTwo), player)
-
-        elif 'collect' in action:
-            collect, cardOne, cardTwo = action.split()
-            print(cardOne, cardTwo)
-            center.collectCards(int(cardOne), int(cardTwo))
-
-        elif 'take' in action:
-            take, pile = action.split()
-            moveFromCenter(player, int(pile))
-        
-        else:
-            print('invalid command or play a goddamn card')
+                print('invalid command or play a goddamn card')
+        except:
+            print("woopsies")
 
         testPrint(player, center.pile)
         action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
@@ -265,7 +269,7 @@ def testPrint(player, center):
         print(f"        {card.value} of {card.suit}")
     print("Center:")
     for pile in center:
-        print(f"    Pile: {pile.collectValue}") # % pile.builtValue)
+        print(f"    Pile: Collect:{pile.collectValue} Build: {pile.builtValue}") # % pile.builtValue)
         for card in pile.pile:
             print(f"        {card.value} of {card.suit}")
 
