@@ -16,4 +16,6 @@
     - quicktake (indexOfCard you wanna use, indexOf target pile)
     - clean da bish
     - style da bish
+    - PLAY isn't working!!! Shouldn't be allowed to play twice.. for some reason
+        it allows me to do so
     
