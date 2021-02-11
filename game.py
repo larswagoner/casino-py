@@ -31,4 +31,4 @@ while deck:
 compare_players(players)
 
 for player in players:
-    player.show_points
+    player.show_points()

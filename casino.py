@@ -224,11 +224,12 @@ def playersTurn(player):
     try:
         while isRunning: 
 
-            if 'end' in action and temp == 1:
-                isRunning = False
+            if 'end' in action and temp < 1:
                 print("don't end before playing you sneaky whore")
+            elif 'end' in action and  temp == 1:
+                isRunning = False
                 break
-            
+
             if 'play' in action:
                 if temp > 1:
                     print('you cant do that you sneaky whore')
@@ -241,17 +242,24 @@ def playersTurn(player):
                     temp += 1
             elif 'build' in action:
                 build, pileOne, pileTwo = action.split()
-                print('please dont be broken', pileOne, pileTwo)
-                center.buildCards(int(pileOne), int(pileTwo), player)
+                if (abs(int(pileOne)) or abs(int(pileTwo))) > (len(center.pile) - 1):
+                    print('slow down there buckaroo...')
+                else:
+                    center.buildCards(int(pileOne), int(pileTwo), player)
 
             elif 'collect' in action:
-                collect, cardOne, cardTwo = action.split()
-                print(cardOne, cardTwo)
-                center.collectCards(int(cardOne), int(cardTwo))
+                collect, pileOne, pileTwo = action.split()
+                if (abs(int(pileOne)) or abs(int(pileTwo))) > (len(center.pile) - 1):
+                    print('slow down there buckaroo...')
+                else:
+                    center.collectCards(int(pileOne), int(pileTwo))
 
             elif 'take' in action:
                 take, pile = action.split()
-                moveFromCenter(player, int(pile))
+                if abs(int(pile)) > (len(center.pile) - 1):
+                    print('slow down there buckaroo...')
+                else:
+                    moveFromCenter(player, int(pile))
             
             else:
                 print('invalid command or play a goddamn card')
@@ -306,7 +314,7 @@ def testPrint(player, center):
 ##################
 
 
-while deck:
+while count < 2:
     if count % (4 * len(players)) == 0 and len(players[-1].hand) == 0:
         dealCards(deck, players)
 
@@ -326,7 +334,8 @@ while deck:
 
     count += 1
 
+print('done wit game')
 compare_players(players)
-
+print('done wit comparision only leads to sadness')
 for player in players:
-    player.show_points
+    player.show_points()
