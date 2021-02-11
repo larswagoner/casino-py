@@ -1,6 +1,19 @@
 - Node.js
+    figure out python -> json -> nodeJS
+    make webserver
+    make websockets
+
+
+- front end 
+    figure out images, graphics, HTML CSS JS 
 
 
 - error checking
+    finish try/except blocks
 
-figure out build, take, collect, play buttons (must play min one card)
+- casino.py
+    - create function packages for collect, taking, plays -> collect -> take
+    - quicktake (indexOfCard you wanna use, indexOf target pile)
+    - clean da bish
+    - style da bish
+    

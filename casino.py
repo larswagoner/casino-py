@@ -44,16 +44,13 @@ class Center:
         
 
     def buildCards(self, indexOne, indexTwo, player):
-        print("in buildCards")
         temp = False
         newBuiltValue = (center.pile[indexOne].builtValue + center.pile[indexTwo].builtValue)
         for i in range(len(player.hand)):
             if newBuiltValue == player.hand[i].value:
                 temp = True
-                print("TESTICLES")
                 break
-        
-        print("TESTIES")
+
         if center.pile[indexOne].isBuilt and center.pile[indexTwo].isBuilt and temp:
             for i in range(len(center.pile[indexOne].pile)):
                 self.pile[indexTwo].pile.append(self.pile[indexOne].pile.pop(0))
@@ -139,8 +136,6 @@ def dealCards(deck, players):
             for i in range(2):
                     for player in players:
                         deal_to_player(deck, player, 2)
-    else: 
-        print('This round has ended')
 
 
 
@@ -157,17 +152,13 @@ def move_to_center(player, indexCard):
 
 def moveFromCenter(player, indexCenterPile):
     temp = False
-    print('Aloha', indexCenterPile)
     for card in center.pile[indexCenterPile].pile:
-        print('continue on soldier')
         if card.wasLastPlayed:
             temp = True
            
             break
 
     if not center.pile[indexCenterPile].isBuilt and temp:
-        print("aloha from inside if")
-
         while center.pile[indexCenterPile].pile: #range(len(center.pile[indexCenterPile].pile)):
             player.discard.append(center.pile[indexCenterPile].pile.pop(0))
         center.pile.pop(indexCenterPile)
@@ -186,7 +177,10 @@ def compare_players(players):
         spadesList.append(playerSpades)
     
     highestCards = [total for total in cardList if total == max(cardList)]
+    
     highestSpades = [total for total in spadesList if total == max(spadesList)]
+
+    print(highestCards, highestSpades)
 
     if len(highestCards) == 1:
         cardWinner = players[cardList.index(max(cardList))]
@@ -314,8 +308,15 @@ def testPrint(player, center):
 ##################
 
 
-while count < 2:
-    if count % (4 * len(players)) == 0 and len(players[-1].hand) == 0:
+while count < 49:
+    temp = False
+    for player in players:
+        if player.hand:
+            temp = False
+            break
+        else:
+            temp = True
+    if temp:
         dealCards(deck, players)
 
     player = players[count % len(players)]
