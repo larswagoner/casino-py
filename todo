@@ -3,6 +3,40 @@
     make webserver
     make websockets
 
+-create homescreen 
+	-start game
+	-get url
+
+
+- Websockets
+	-connect to server
+		-first response needs clientID: guid
+	-create a game
+		-method: CREATE
+		-clientID: guid
+	
+	-Save state in Redis database
+
+	-join game
+		method: join
+		clientID: guid
+		gameID: guid
+	
+
+	-wait for all players to be ready
+
+	-play -- FAST
+		method: play
+		clientID: guid
+		gameID: guid
+		game: ...
+
+	-broadcast state:
+		after x amount of time 
+		server responds in batch to all clients
+		method: update
+		game: ...
+
 
 - front end 
     figure out images, graphics, HTML CSS JS 
@@ -18,4 +52,10 @@
     - style da bish
     - PLAY isn't working!!! Shouldn't be allowed to play twice.. for some reason
         it allows me to do so
-    
+   	- Make game input and output as "efficient" as possible 
+		- do we send all game data everytime? or just the changes?
+
+
+
+
+
