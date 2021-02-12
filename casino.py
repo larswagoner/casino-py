@@ -1,5 +1,44 @@
 import random
 import sys
+import os
+
+class Print:
+    def __init__(self):
+        self.whoreVar = "you cant do that you sneaky whore"
+        self.buckarooVar = "slow down there buckaroo"
+        self.erorVar = "there was an error"
+        self.eror2Var = "you typed an invalid command or just play a goddamn card"
+        self.neinVar = "NEIN"
+        self.endVar = "ye fookin done"
+        
+
+    def whore(self, name):
+        print(name + ", " + self.whoreVar)
+        os.system("say " + name + ", " + self.whoreVar )
+
+    def buckaroo(self, name):
+        print(name + ", " + self.buckarooVar)
+        os.system("say " + name + ", " + self.buckarooVar )
+
+    def eror(self, name):
+        print(name + ", " + self.erorVar)
+        os.system("say " + name + ", " + self.erorVar )
+
+    def eror2(self, name):
+        print(name + ", " + self.eror2Var)
+        os.system("say " + name + ", " + self.eror2Var )
+
+    def nein(self, name):
+        print(name + ", " + self.neinVar)
+        os.system("say " + name + ", " + self.neinVar)
+
+    def end(self, name):
+        print(name + ", " + self.endVar)
+        os.system("say " + name + ", " + self.endVar)
+        
+say = Print()
+
+
 
 class Player:
     def __init__(self, name):
@@ -71,7 +110,7 @@ class Center:
             self.pile[indexTwo].isBuilt = False
             self.pile.pop(indexOne)
         else:
-            print("NEIN")
+            say.nein()
 
 
 
@@ -219,50 +258,56 @@ def playersTurn(player):
         while isRunning: 
 
             if 'end' in action and temp < 1:
-                print("don't end before playing you sneaky whore")
+                
+                say.eror(player.name)                   # print("don't end before playing you sneaky whore")
+                
             elif 'end' in action and  temp == 1:
                 isRunning = False
                 break
 
             if 'play' in action:
-                if temp > 1:
-                    print('you cant do that you sneaky whore')
-                    break
-                play, card = action.split()
-                if int(card) > (len(player.hand) - 1):
-                    print("range error, try again!")
+                if temp > 0:
+                    say.whore(player.name)
                 else:
-                    move_to_center(player, int(card))
-                    temp += 1
+                    play, card = action.split()
+                    if int(card) > (len(player.hand) - 1):
+                        say.error(player.name)
+                    else:
+                        move_to_center(player, int(card))
+                        temp += 1
             elif 'build' in action:
                 build, pileOne, pileTwo = action.split()
                 if (abs(int(pileOne)) or abs(int(pileTwo))) > (len(center.pile) - 1):
-                    print('slow down there buckaroo...')
+                    say.buckaroo(player.name)
                 else:
                     center.buildCards(int(pileOne), int(pileTwo), player)
 
             elif 'collect' in action:
                 collect, pileOne, pileTwo = action.split()
                 if (abs(int(pileOne)) or abs(int(pileTwo))) > (len(center.pile) - 1):
-                    print('slow down there buckaroo...')
+                    say.buckaroo(player.name)
                 else:
                     center.collectCards(int(pileOne), int(pileTwo))
 
             elif 'take' in action:
                 take, pile = action.split()
                 if abs(int(pile)) > (len(center.pile) - 1):
-                    print('slow down there buckaroo...')
+                    say.buckaroo(player.name)
                 else:
                     moveFromCenter(player, int(pile))
-            
+
+            elif 'quit' in action:
+                quit()
+
             else:
-                print('invalid command or play a goddamn card')
+                say.eror2(player.name)
 
             testPrint(player, center.pile)
             action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
     except:
         print(sys.exc_info()[0])
-        print("ye fookin done")
+        say.end(player.name)
+        # quit()
 
     print("Next person's turn...")
 
@@ -326,11 +371,8 @@ while count < 49:
         for card in pile.pile:
             card.wasLastPlayed = False
     
-    try:
-        playersTurn(player)
-    except:
-        print(sys.exc_info()[0])
-        print("---------there was an error---------")
+    playersTurn(player)
+    
 
 
     count += 1
