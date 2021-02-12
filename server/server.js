@@ -1,5 +1,5 @@
 const http = require('http');
-const wsServer = require("ws").server
+const wsServer = require("websocket").server
 const httpServer = http.createServer();
 
 
@@ -29,8 +29,9 @@ ws.on("request", request => {
     connection.on("open", () => console.log("opened"));
     connection.on("close", () => console.log("closed"));
     connection.on("message", message => {
+        const result = JSON.parse(message.utf8Data);
         //Received a message from client
-
+        console.log(result);
 
     });
 
@@ -38,6 +39,17 @@ ws.on("request", request => {
     clients[client] = {
         "connection": connection
     };
+
+    const payLoad = {
+        "method": "connect",
+        "clientId": clientId
+    }
+
+    //send back the client connect
+    connection.send(JSON.stringify(payLoad))
+
+
+
 
 });
  
