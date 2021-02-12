@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Websocket Test</title>
+</head>
+<body>
+    <h1>Websocket test</h1>
+    <button id="btnCreate">New Game</button>
+    <script>
+        const btnCreate = document.getElementById("btnCreate");
+        let clientId = null;
+        let ws = new WebSocket("ws://localhost:3100");
+
+        
+        btnCreate.addEventListener("click", e => {
+            const payLoad = {
+                "method": "create",
+                "clientId": clientId
+            }
+            ws.send(JSON.stringify(payLoad));
+        });
+        
+        ws.onmessage = message => {
+            //message.data is string that server has sent
+            const response = JSON.parse(message.data);
+
+            //Our own connect method to store clientID
+            if(response.method === "connect"){
+                clientId = response.clientId;
+                console.log("Client ID set: " + clientId);
+            }
+        };
+
+
+
+
+    </script>
+</body>
+</html>

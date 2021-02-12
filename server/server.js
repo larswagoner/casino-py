@@ -1,7 +1,14 @@
 const http = require('http');
+
 const wsServer = require("websocket").server
 const httpServer = http.createServer();
 
+
+// ---------- Host Webpage ----------
+const app = require("express")();
+app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
+app.listen(3000, () => console.log("listening on 3000"))
+// ----------------------------------
 
 
 
@@ -9,6 +16,7 @@ httpServer.listen(3100, () => console.log("listening on 3100"));
 
 //hasmap
 const clients = {};
+const games = {};
 
 const ws = new wsServer({
     "httpServer": httpServer
@@ -31,12 +39,17 @@ ws.on("request", request => {
     connection.on("message", message => {
         const result = JSON.parse(message.utf8Data);
         //Received a message from client
-        console.log(result);
+        if (result.method === "create"){
+            const connectedClient = result.clientId;
+            const gameId = uuid();
+
+
+        }
 
     });
 
     const clientId = uuid();
-    clients[client] = {
+    clients[clientId] = {
         "connection": connection
     };
 
