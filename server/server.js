@@ -42,7 +42,22 @@ ws.on("request", request => {
         if (result.method === "create"){
             const connectedClient = result.clientId;
             const gameId = uuid();
+            games[gameId] = {
+                "id": gameId,
+                "balls": 20
+            }
+            const payLoad = {
+                "method": "create",
+                "game": games[gameId]
+            }
+            const con = clients[connectedClient].connection;
+            con.send(JSON.stringify(payLoad));
+        }
 
+        if (result.method === "join") {
+            const clientId = response.clientId;
+            const gameId = response.gameId;
+            const game = game
 
         }
 

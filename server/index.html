@@ -9,11 +9,28 @@
 <body>
     <h1>Websocket test</h1>
     <button id="btnCreate">New Game</button>
+    <button id="btnJoin">Join Game</button>
+    <input type="text" id="joinId">
     <script>
         const btnCreate = document.getElementById("btnCreate");
+        const btnJoin = document.getElementById("btnJoin");
+        const joinId = document.getElementById("joinUrl");
         let clientId = null;
+        let gameId = null;
         let ws = new WebSocket("ws://localhost:3100");
 
+        
+        btnJoin.addEventListener("click", e => {
+            if(gameId == null){
+                gameId = joinId.value;
+            }
+            const payLoad = {
+                "method": "join",
+                "clientId": clientId,
+                "gameId": gameId,
+            }
+            ws.send(JSON.stringify(payLoad));
+        });
         
         btnCreate.addEventListener("click", e => {
             const payLoad = {
@@ -30,8 +47,16 @@
             //Our own connect method to store clientID
             if(response.method === "connect"){
                 clientId = response.clientId;
+                gameId = response.game.id;
                 console.log("Client ID set: " + clientId);
             }
+
+            if(response.method === "create"){
+                clientId = response.clientId;
+                console.log("game successfully create " + response.game.id + " with " + response.game.balls);
+            }
+
+            
         };
 
 
