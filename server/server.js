@@ -1,24 +1,24 @@
 const http = require('http');
-const express = require('express');
-const WebSocket = require('ws');
+const wsServer = require("websocket").server
+const httpServer = http.createServer();
 
 
-const port = 3100;
 
-const server = http.createServer(express);
 
-const wsServer = new WebSocket.Server({ server });
+httpServer.listen(3100, () => console.log("listening on 3100"));
 
-wsServer.on('connection', (ws) => {
-    ws.on('message', (data) => {
-        wsServer.clients.forEach((client) => {
-            if(client !== ws && client.readyState === WebSocket.OPEN) {
-                client.send(data);
-            }
-        })
-    });
-});
 
-server.listen(port, () => {
-    console.log("Server is listening on " + port);
+const ws = new wsServer({
+    "httpServer": httpServer
 })
+
+ws.on("request", request => {
+    //connection by client
+    const connection = request.accept(null, request.origin);
+    connection.on("open", () => console.log("opened"));
+    connection.on("close", () => console.log("closed"));
+    connection.on("message", () => console.log("opened!"));
+
+
+})
+
