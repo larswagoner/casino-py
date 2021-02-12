@@ -134,9 +134,6 @@ class Card:
 
 
 
-
-
-
 def create_deck():
     suits = ['spades', 'clubs', 'diamonds', 'hearts']
     deck = []
@@ -230,6 +227,13 @@ def compare_players(players):
         spadesWinner.points += 1
             
 
+def check_commands(player, commands, num):
+    if(len(commands)-1 != num):
+        say.eror(player.name)
+        return False
+    else
+        return True
+
 def setup():
     players = []
     deck = create_deck()
@@ -250,16 +254,17 @@ center = Center()
 def playersTurn(player):
     testPrint(player, center.pile)
     action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
+    commands = action.split()
+    while len(commands) < 3:
+        commands.append('')
 
     temp = 0
     isRunning = True
 
     try:
-        while isRunning: 
-
+        while isRunning:
             if 'end' in action and temp < 1:
-                
-                say.eror(player.name)                   # print("don't end before playing you sneaky whore")
+                say.eror(player.name)
                 
             elif 'end' in action and  temp == 1:
                 isRunning = False
@@ -269,32 +274,33 @@ def playersTurn(player):
                 if temp > 0:
                     say.whore(player.name)
                 else:
-                    play, card = action.split()
-                    if int(card) > (len(player.hand) - 1):
-                        say.error(player.name)
+                    if int(commands[1]) > (len(player.hand) - 1):
+                        say.eror(player.name)
                     else:
-                        move_to_center(player, int(card))
+                        move_to_center(player, int(commands[1]))
                         temp += 1
             elif 'build' in action:
-                build, pileOne, pileTwo = action.split()
-                if (abs(int(pileOne)) or abs(int(pileTwo))) > (len(center.pile) - 1):
+                ---------------------
+                check(commands, 2 )
+                print(commands)
+                if (abs(int(commands[1])) or abs(int(commands[2]))) > (len(center.pile) - 1):
+                    print('oops')
                     say.buckaroo(player.name)
                 else:
-                    center.buildCards(int(pileOne), int(pileTwo), player)
+                    center.buildCards(int(commands[1]), int(commands[2]), player)
 
             elif 'collect' in action:
-                collect, pileOne, pileTwo = action.split()
-                if (abs(int(pileOne)) or abs(int(pileTwo))) > (len(center.pile) - 1):
+                print(commands)
+                if (abs(int(commands[1])) or abs(int(commands[2]))) > (len(center.pile) - 1):
                     say.buckaroo(player.name)
                 else:
-                    center.collectCards(int(pileOne), int(pileTwo))
+                    center.collectCards(int(commands[1]), int(commands[2]))
 
             elif 'take' in action:
-                take, pile = action.split()
-                if abs(int(pile)) > (len(center.pile) - 1):
+                if (abs(int(commands[1])) > (len(center.pile) - 1)):
                     say.buckaroo(player.name)
                 else:
-                    moveFromCenter(player, int(pile))
+                    moveFromCenter(player, int(commands[1]))
 
             elif 'quit' in action:
                 quit()
@@ -304,6 +310,10 @@ def playersTurn(player):
 
             testPrint(player, center.pile)
             action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
+            commands = action.split()
+            while len(commands) < 3:
+                commands.append('')
+
     except:
         print(sys.exc_info()[0])
         say.end(player.name)
