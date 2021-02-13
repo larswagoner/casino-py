@@ -231,7 +231,7 @@ def check_commands(player, commands, num):
     if(len(commands)-1 != num):
         say.eror(player.name)
         return False
-    else
+    else:
         return True
 
 def setup():
@@ -280,14 +280,13 @@ def playersTurn(player):
                         move_to_center(player, int(commands[1]))
                         temp += 1
             elif 'build' in action:
-                ---------------------
-                check(commands, 2 )
-                print(commands)
-                if (abs(int(commands[1])) or abs(int(commands[2]))) > (len(center.pile) - 1):
-                    print('oops')
-                    say.buckaroo(player.name)
-                else:
-                    center.buildCards(int(commands[1]), int(commands[2]), player)
+                if check_commands(player, commands, 2):
+                    print(commands)
+                    if (abs(int(commands[1])) or abs(int(commands[2]))) > (len(center.pile) - 1):
+                        print('oops')
+                        say.buckaroo(player.name)
+                    else:
+                        center.buildCards(int(commands[1]), int(commands[2]), player)
 
             elif 'collect' in action:
                 print(commands)
