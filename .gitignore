@@ -4,4 +4,6 @@ venv
 .idea/
 .vscode
 testingzone.py
+server/node_modules
+server/package-lock.json
 messin_about.py
