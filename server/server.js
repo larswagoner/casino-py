@@ -2,10 +2,10 @@ const http = require("http");
 const app = require("express")();
 app.get("/", (req,res)=> res.sendFile(__dirname + "/index.html"))
 
-app.listen(3101, ()=>console.log("Listening on http port 3101"))
+app.listen(8400, ()=>console.log("webserver on 8400"))
 const websocketServer = require("websocket").server
 const httpServer = http.createServer();
-httpServer.listen(3100, () => console.log("Listening.. on 3100"))
+httpServer.listen(8500, () => console.log("wss on 8500"))
 //hashmap clients
 const clients = {};
 const games = {};
@@ -46,7 +46,7 @@ wsServer.on("request", request => {
             const clientId = result.clientId;
             const gameId = result.gameId;
             const game = games[gameId];
-            if (game.clients.length >= 3) 
+            if (game.clients.length > 3) 
             {
                 //sorry max players reach
                 return;
