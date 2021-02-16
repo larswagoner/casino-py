@@ -27,9 +27,6 @@ if(query.matches){
 
 
 
-
-
-
 canvas.width = width;
 canvas.height = height;
 
