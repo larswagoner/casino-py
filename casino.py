@@ -251,67 +251,97 @@ players, deck, count = setup()
 
 center = Center()
 
+def is_digit(strings):
+    for i in strings:
+        if i.startswith('-') and i[1:].isdigit():
+            return True
+        elif i.isdigit():
+            return True
+        else:
+            return False
+
+def check_input(commands, player):
+    possibleActions = ['end', 'play', 'build', 'collect', 'take']
+    if commands:
+        if commands[0] in possibleActions:
+            if commands[0] == possibleActions[0] and len(commands) == 1 and is_digit(commands[1::]):
+                return True
+            elif commands[0] == possibleActions[1] and len(commands) == 2 and is_digit(commands[1::]):
+                return True
+            else:
+                for action in possibleActions[2::]:
+                    if commands[0] == action and len(commands) == 3 and is_digit(commands[1::]):
+                        return True
+        else:
+            return False
+
+    else:
+        return False
+    
+
+
+
 def playersTurn(player):
     testPrint(player, center.pile)
     action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
     commands = action.split()
-    while len(commands) < 3:
-        commands.append('')
-
+    
     temp = 0
     isRunning = True
 
     try:
         while isRunning:
-            if 'end' in action and temp < 1:
-                say.eror(player.name)
-                
-            elif 'end' in action and  temp == 1:
-                isRunning = False
-                break
+            if not check_input(commands, player):
+                say.eror2(player.name) 
+            else:
 
-            if 'play' in action:
-                if temp > 0:
-                    say.whore(player.name)
-                else:
-                    if int(commands[1]) > (len(player.hand) - 1):
-                        say.eror(player.name)
+                if 'end' in action and temp < 1:
+                    say.eror(player.name)
+                    
+                elif 'end' in action and  temp == 1:
+                    isRunning = False
+                    break
+
+                if 'play' in action:
+                    if temp > 0:
+                        say.whore(player.name)
                     else:
-                        move_to_center(player, int(commands[1]))
-                        temp += 1
-            elif 'build' in action:
-                if check_commands(player, commands, 2):
+                        if int(commands[1]) > (len(player.hand) - 1):
+                            say.eror(player.name)
+                        else:
+                            move_to_center(player, int(commands[1]))
+                            temp += 1
+                elif 'build' in action:
+                    if check_commands(player, commands, 2):
+                        print(commands)
+                        if (abs(int(commands[1])) or abs(int(commands[2]))) > (len(center.pile) - 1):
+                            print('oops')
+                            say.buckaroo(player.name)
+                        else:
+                            center.buildCards(int(commands[1]), int(commands[2]), player)
+
+                elif 'collect' in action:
                     print(commands)
                     if (abs(int(commands[1])) or abs(int(commands[2]))) > (len(center.pile) - 1):
-                        print('oops')
                         say.buckaroo(player.name)
                     else:
-                        center.buildCards(int(commands[1]), int(commands[2]), player)
+                        center.collectCards(int(commands[1]), int(commands[2]))
 
-            elif 'collect' in action:
-                print(commands)
-                if (abs(int(commands[1])) or abs(int(commands[2]))) > (len(center.pile) - 1):
-                    say.buckaroo(player.name)
+                elif 'take' in action:
+                    if (abs(int(commands[1])) > (len(center.pile) - 1)):
+                        say.buckaroo(player.name)
+                    else:
+                        moveFromCenter(player, int(commands[1]))
+
+                elif 'quit' in action:
+                    quit()
+
                 else:
-                    center.collectCards(int(commands[1]), int(commands[2]))
-
-            elif 'take' in action:
-                if (abs(int(commands[1])) > (len(center.pile) - 1)):
-                    say.buckaroo(player.name)
-                else:
-                    moveFromCenter(player, int(commands[1]))
-
-            elif 'quit' in action:
-                quit()
-
-            else:
-                say.eror2(player.name)
+                    say.eror2(player.name)
 
             testPrint(player, center.pile)
             action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
             commands = action.split()
-            while len(commands) < 3:
-                commands.append('')
 
     except:
         print(sys.exc_info()[0])
