@@ -7,6 +7,9 @@
 	-start game
 	-get url
 
+- json
+    - find best way to organize cards 
+
 
 - Websockets
 	-connect to server
