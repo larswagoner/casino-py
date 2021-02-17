@@ -67,7 +67,8 @@ class Player:
         return self.cards, self.spades
     
     def handToDiscard(self, indexOne):
-        self.discard.append(self.hand.pop[indexOne])
+        # print(self.hand.pop(indexOne])
+        self.discard.append(self.hand.pop(indexOne))
 
 
 
@@ -194,11 +195,10 @@ def moveFromCenter(player, indexCenterPile):
     for card in center.pile[indexCenterPile].pile:
         if card.wasLastPlayed:
             temp = True
-           
             break
 
     if not center.pile[indexCenterPile].isBuilt and temp:
-        while center.pile[indexCenterPile].pile: #range(len(center.pile[indexCenterPile].pile)):
+        while center.pile[indexCenterPile].pile:
             player.discard.append(center.pile[indexCenterPile].pile.pop(0))
         center.pile.pop(indexCenterPile)
     else:
@@ -233,7 +233,6 @@ def compare_players(players):
 def setup():
     players = []
     deck = create_deck()
-    # center = Center()
     count = 0
 
     numPlayers = input('Enter how many players: ')
@@ -263,15 +262,26 @@ def is_digit(strings):
 def check_input(commands, player, possibleActions):
     if commands:
         if commands[0] in possibleActions:
-            if commands[0] == possibleActions[0] and len(commands) == 1:
+            if commands[0] == possibleActions[0] and len(commands) == 1: # quit
                 return True
-            if commands[0] == possibleActions[1] and len(commands) == 1:
+            elif commands[0] == possibleActions[1] and len(commands) == 1: # end
                 return True
-            elif commands[0] == possibleActions[2] and len(commands) == 2 and is_digit(commands[1::]):
-            
+            elif commands[0] == possibleActions[2] and len(commands) == 2 and is_digit(commands[1::]): # play
+                if(int(commands[1]) > (len(player.hand) - 1)):
+                    say.buckaroo(player.name)
+                elif(abs(int(commands[1])) > (len(player.hand))):
+                    say.buckaroo(player.name)
+                else:
+                    return True
+            elif commands[0] == possibleActions[3] and len(commands) == 2 and is_digit(commands[1::]): # take
+                if(int(commands[1]) > (len(center.pile) - 1)):
+                    say.buckaroo(player.name)
+                elif(abs(int(commands[1])) > (len(center.pile))):
+                    say.buckaroo(player.name)
+                else:
                     return True
             else:
-                for action in possibleActions[3::]:
+                for action in possibleActions[4::]: # build, collect and quickTake
                     if commands[0] == action and len(commands) == 3 and is_digit(commands[1::]):
                         if (int(commands[1]) or int(commands[2])) > (len(center.pile) - 1):
                             say.buckaroo(player.name)
@@ -293,7 +303,7 @@ def playersTurn(player):
     printTable(player, center.pile)
     action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
     commands = action.split()
-    possibleActions = ['quit', 'end', 'play', 'build', 'collect', 'take', 'quickTake']
+    possibleActions = ['quit', 'end', 'play', 'take', 'build', 'collect', 'quick']
 
     temp = 0
     isRunning = True
@@ -303,35 +313,40 @@ def playersTurn(player):
         if not check_input(commands, player, possibleActions):
             say.eror2(player.name) 
         else:
-            if commands[0] == possibleActions[0]:
+            # add here
+            if commands[0] == possibleActions[0]: #quit
                 quit()
 
-            elif commands[0] == possibleActions[1] and temp < 1:
+            elif commands[0] == possibleActions[1] and temp < 1: #end
                 say.eror(player.name)
                 
-            elif commands[0] == possibleActions[1] and temp == 1:
+            elif commands[0] == possibleActions[1] and temp == 1: #end
                 isRunning = False
                 break
 
-            if commands[0] == possibleActions[2]:
+            elif commands[0] == possibleActions[2]: #play
                 if temp > 0:
                     say.whore(player.name)
                 else:
                     move_to_center(player, int(commands[1]))
                     temp += 1
-            elif commands[0] == possibleActions[3]:
+
+            elif commands[0] == possibleActions[3]: #take
+                moveFromCenter(player, int(commands[1]))
+
+            elif commands[0] == possibleActions[4]: #build
                 center.buildCards(int(commands[1]), int(commands[2]), player)
 
-            elif commands[0] == possibleActions[4]:
+            elif commands[0] == possibleActions[5]: #collect
                 center.collectCards(int(commands[1]), int(commands[2]))
 
-            elif commands[0] == possibleActions[5]:
-                moveFromCenter(player, int(commands[1]))
-                    
-            elif commands[0] == possibleActions[6]:
+            elif commands[0] == possibleActions[6]: #quickTake 
                 if player.hand[int(commands[1])].value == center.pile[int(commands[2])].builtValue:
                     player.handToDiscard(int(commands[1]))
+                    center.pile[int(commands[2])].isBuilt = False
+                    center.pile[int(commands[2])].pile[0].wasLastPlayed = True
                     moveFromCenter(player, int(commands[2]))
+                    temp += 1
                 
 
         printTable(player, center.pile)
