@@ -35,8 +35,15 @@
 		game: ...
 
 
+
+- Rebuild entire game into JS client
+	look at how to use classes/objects for recreating casino.py
+
+
 - front end 
-    figure out images, graphics, HTML CSS JS 
+    figure out images, graphics, HTML CSS JS
+	use image objects created in .json files
+	think of how to drag and drop cards
 
 
 - casino.py
