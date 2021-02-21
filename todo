@@ -44,7 +44,8 @@
     figure out images, graphics, HTML CSS JS
 	use image objects created in .json files
 	think of how to drag and drop cards
-
+	- maybe look at p5 ?
+		-cool animations and graphics can be done with p5.js
 
 - casino.py
     - clean da bish
