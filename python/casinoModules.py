@@ -1,6 +1,5 @@
-import random
-import sys
 import os
+
 
 class Print:
     def __init__(self):
@@ -79,18 +78,17 @@ class CenterPile:
 class Center:
     def __init__(self):
         self.pile = []
-        
 
     def buildCards(self, indexOne, indexTwo, player):
         temp = False
-        newBuiltValue = (center.pile[indexOne].builtValue + center.pile[indexTwo].builtValue)
+        newBuiltValue = (self.pile[indexOne].builtValue + self.pile[indexTwo].builtValue)
         for i in range(len(player.hand)):
             if newBuiltValue == player.hand[i].value:
                 temp = True
                 break
 
-        if center.pile[indexOne].isBuilt and center.pile[indexTwo].isBuilt and temp:
-            for i in range(len(center.pile[indexOne].pile)):
+        if self.pile[indexOne].isBuilt and self.pile[indexTwo].isBuilt and temp:
+            for i in range(len(self.pile[indexOne].pile)):
                 self.pile[indexTwo].pile.append(self.pile[indexOne].pile.pop(0))
 
         
@@ -103,13 +101,14 @@ class Center:
 
     def collectCards(self, indexOne, indexTwo):
         if self.pile[indexOne].collectValue == self.pile[indexTwo].collectValue:
-            for i in range(len(center.pile[indexOne].pile)):
+            for i in range(len(self.pile[indexOne].pile)):
                 self.pile[indexTwo].pile.append(self.pile[indexOne].pile.pop(0))
 
             self.pile[indexTwo].isBuilt = False
             self.pile.pop(indexOne)
         else:
-            say.nein(player.name)
+            print("NEIN")
+            # say.nein(player.name)
 
 
 class Card:

@@ -10,8 +10,6 @@ import os
 ##################
 ##################
 
-
-
 def create_deck():
     suits = ['spades', 'clubs', 'diamonds', 'hearts']
     deck = []
@@ -22,7 +20,6 @@ def create_deck():
     return deck
 
 
-
 def deal_to_center(deck, numCards):
     for i in range(numCards):
         center.pile.append(CenterPile())
@@ -31,11 +28,9 @@ def deal_to_center(deck, numCards):
         center.pile[-1].collectValue = center.pile[-1].pile[0].builtValue
 
 
-
 def deal_to_player(deck, player, numCards):
     for i in range(numCards):
             player.hand.append(deck.pop(0))
-
 
 
 def dealCards(deck, players):
@@ -52,7 +47,6 @@ def dealCards(deck, players):
                         deal_to_player(deck, player, 2)
 
 
-
 def move_to_center(player, indexCard):
     center.pile.append(CenterPile())
     
@@ -61,7 +55,6 @@ def move_to_center(player, indexCard):
     center.pile[-1].collectValue += center.pile[-1].pile[0].builtValue
     center.pile[-1].pile[0].wasLastPlayed = True
     center.pile[-1].pile[0].isBuilt = True
-
 
 
 def moveFromCenter(player, indexCenterPile):
@@ -77,7 +70,6 @@ def moveFromCenter(player, indexCenterPile):
         center.pile.pop(indexCenterPile)
     else:
         print("NEIN")
-
 
 
 def compare_players(players):
@@ -120,9 +112,7 @@ def setup():
             
     return players, deck, count
 
-say = Print()
-players, deck, count = setup()
-center = Center()
+
 
 def is_digit(strings):
     for i in strings:
@@ -132,6 +122,7 @@ def is_digit(strings):
             return True
         else:
             return False
+
 
 def check_input(commands, player, possibleActions):
     if commands:
@@ -168,8 +159,6 @@ def check_input(commands, player, possibleActions):
 
     else:
         return False
-    
-
 
 
 def playersTurn(player):
@@ -236,7 +225,6 @@ def playersTurn(player):
     print("Next person's turn...")
 
 
-
 def prettyPrint(players, centerList):
     for p in players:
     
@@ -256,6 +244,7 @@ def prettyPrint(players, centerList):
             print(f"        {c.value} of {c.suit}")
     print("#################################")
 
+
 def printTable(player, center):
     print(f"{player.name}'s Cards: ")
     for card in player.hand:
@@ -269,13 +258,15 @@ def printTable(player, center):
 
 
 
-
 ##################
 ##################
 #####GAME.PY######
 ##################
 ##################
 
+say = Print()
+players, deck, count = setup()
+center = Center()
 
 while count < 49:
     temp = False
@@ -290,14 +281,11 @@ while count < 49:
 
     player = players[count % len(players)]
 
-    
     for pile in center.pile:
         for card in pile.pile:
             card.wasLastPlayed = False
     
     playersTurn(player)
-    
-
 
     count += 1
 
