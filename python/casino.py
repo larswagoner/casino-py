@@ -33,7 +33,7 @@ def deal_to_player(deck, player, numCards):
             player.hand.append(deck.pop(0))
 
 
-def dealCards(deck, players):
+def deal_cards(deck, players):
     if deck:
         if len(deck) == 52:
                 for i in range(2):
@@ -57,7 +57,7 @@ def move_to_center(player, indexCard):
     center.pile[-1].pile[0].isBuilt = True
 
 
-def moveFromCenter(player, indexCenterPile):
+def move_from_center(player, indexCenterPile):
     temp = False
     for card in center.pile[indexCenterPile].pile:
         if card.wasLastPlayed:
@@ -69,7 +69,7 @@ def moveFromCenter(player, indexCenterPile):
             player.discard.append(center.pile[indexCenterPile].pile.pop(0))
         center.pile.pop(indexCenterPile)
     else:
-        print("NEIN")
+        say.error()
 
 
 def compare_players(players):
@@ -114,23 +114,24 @@ def setup():
 
 
 
-def is_digit(strings):
+def is_digit(strings, player):
     for i in strings:
         if i.startswith('-') and i[1:].isdigit():
             return True
         elif i.isdigit():
             return True
         else:
+            say.invalid(player.name)
             return False
 
-def is_in_range(commands, list):
+
+def is_in_range(commands, list, player):
     commands = [(int(index)) for index in commands]
     for index in commands:
         if not((-len(list)) <= index <= (len(list) - 1)):
+            say.range(player.name)
             return False
-            break
     return True
-        
 
 
 
@@ -141,24 +142,21 @@ def check_input(commands, player, possibleActions):
                 return True
             elif commands[0] == possibleActions[1] and len(commands) == 1: # end
                 return True
-            elif commands[0] == possibleActions[2] and len(commands) == 2 and is_digit(commands[1::]) and is_in_range(commands[1::], player.hand): # play
+            elif commands[0] == possibleActions[2] and len(commands) == 2 and is_digit(commands[1::], player) and is_in_range(commands[1::], player.hand, player): # play
                 return True
-            elif commands[0] == possibleActions[3] and len(commands) == 2 and is_digit(commands[1::]) and is_in_range(commands[1::], center.pile): # take
+            elif commands[0] == possibleActions[3] and len(commands) == 2 and is_digit(commands[1::], player) and is_in_range(commands[1::], center.pile, player): # take
                 return True
-            elif commands[0] == possibleActions[4] and len(commands) == 3 and is_digit(commands[1::]) and is_in_range(commands[1::], player.hand): #build
+            elif commands[0] == possibleActions[4] and len(commands) == 3 and is_digit(commands[1::], player) and is_in_range(commands[1::], player.hand, player): #build
                 return True
-            elif commands[0] == possibleActions[5] and len(commands) == 3 and is_digit(commands[1::]) and is_in_range(commands[1::], player.hand): #collect
+            elif commands[0] == possibleActions[5] and len(commands) == 3 and is_digit(commands[1::], player) and is_in_range(commands[1::], player.hand, player): #collect
                 return True
-            elif commands[0] == possibleActions[6] and len(commands) == 3 and is_digit(commands[1::]) and is_in_range(commands[1::], player.hand) and is_in_range(commands[1::], center.pile): #quick
+            elif commands[0] == possibleActions[6] and len(commands) == 3 and is_digit(commands[1::], player) and is_in_range(commands[1::], player.hand, player) and is_in_range(commands[1::], center.pile, player): #quick
                 return True
-        else:
-            return False
-    else:
-        return False
+    say.invalid(player.name)
+    return False
 
 
 def playersTurn(player):
-    # try:
     printTable(player, center.pile)
     action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
     commands = action.split()
@@ -169,15 +167,13 @@ def playersTurn(player):
 
 
     while isRunning:
-        if not check_input(commands, player, possibleActions):
-            say.eror2(player.name) 
-        else:
+        if check_input(commands, player, possibleActions):
             # add here
             if commands[0] == possibleActions[0]: #quit
                 quit()
 
             elif commands[0] == possibleActions[1] and temp < 1: #end
-                say.eror(player.name)
+                say.illegal(player.name)
                 
             elif commands[0] == possibleActions[1] and temp == 1: #end
                 isRunning = False
@@ -185,13 +181,13 @@ def playersTurn(player):
 
             elif commands[0] == possibleActions[2]: #play
                 if temp > 0:
-                    say.whore(player.name)
+                    say.illegal(player.name)
                 else:
                     move_to_center(player, int(commands[1]))
                     temp += 1
 
             elif commands[0] == possibleActions[3]: #take
-                moveFromCenter(player, int(commands[1]))
+                move_from_center(player, int(commands[1]))
 
             elif commands[0] == possibleActions[4]: #build
                 center.buildCards(int(commands[1]), int(commands[2]), player)
@@ -204,20 +200,12 @@ def playersTurn(player):
                     player.handToDiscard(int(commands[1]))
                     center.pile[int(commands[2])].isBuilt = False
                     center.pile[int(commands[2])].pile[0].wasLastPlayed = True
-                    moveFromCenter(player, int(commands[2]))
+                    move_from_center(player, int(commands[2]))
                     temp += 1
-                
 
         printTable(player, center.pile)
-        action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
+        action = input('Enter (play, build, collect, take, quick or end) and the corresponding indices: ')
         commands = action.split()
-
-    # except KeyboardInterrupt:
-    #     print("you're stuck here forever :-) ")
-    # except:
-    #     print(sys.exc_info()[0])
-    #     say.end(player.name)
-
     print("Next person's turn...")
 
 
@@ -273,7 +261,7 @@ while count < 49:
         else:
             temp = True
     if temp:
-        dealCards(deck, players)
+        deal_cards(deck, players)
 
     player = players[count % len(players)]
 
@@ -285,8 +273,7 @@ while count < 49:
 
     count += 1
 
-print('done wit game')
+print('game finished')
 compare_players(players)
-print('done wit comparision only leads to sadness')
 for player in players:
     player.show_points()

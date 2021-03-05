@@ -3,37 +3,28 @@ import os
 
 class Print:
     def __init__(self):
-        self.whoreVar = "you cant do that you sneaky whore"
-        self.buckarooVar = "slow down there buckaroo"
-        self.erorVar = "there was an error"
-        self.eror2Var = "you typed an invalid command or just play a goddamn card"
-        self.neinVar = "NEIN"
-        self.endVar = "ye fookin done"
+        self.invalidVar = "you typed an invalid command" #too many commands, typo
+        self.rangeVar = "slow down there buckaroo, that index was out of range" # indexing something that's out of range
+        self.illegalVar = "illegal move, you cant do that" #play >1, end too soon, invalid collect, build, quick, take.
+        self.errorVar = "there was an error" # something went wrong, general error
         
 
-    def whore(self, name):
-        print(name + ", " + self.whoreVar)
-        os.system("say " + name + ", " + self.whoreVar )
 
-    def buckaroo(self, name):
-        print(name + ", " + self.buckarooVar)
-        os.system("say " + name + ", " + self.buckarooVar )
+    def invalid(self, name):
+        print(name + ", " + self.invalidVar)
+        os.system("say " + name + ", " + self.invalidVar)
+    
+    def range(self, name):
+        print(name + ", " + self.rangeVar)
+        os.system("say " + name + ", " + self.rangeVar)
 
-    def eror(self, name):
-        print(name + ", " + self.erorVar)
-        os.system("say " + name + ", " + self.erorVar )
+    def illegal(self, name):
+        print(name + ", " + self.illegalVar)
+        os.system("say " + name + ", " + self.illegalVar)
 
-    def eror2(self, name):
-        print(name + ", " + self.eror2Var)
-        os.system("say " + name + ", " + self.eror2Var )
-
-    def nein(self, name):
-        print(name + ", " + self.neinVar)
-        os.system("say " + name + ", " + self.neinVar)
-
-    def end(self, name):
-        print(name + ", " + self.endVar)
-        os.system("say " + name + ", " + self.endVar)
+    def error(self):
+        print(self.errorVar)
+        os.system("say " + ", " + self.errorVar)
 
 
 class Player:

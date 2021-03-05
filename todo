@@ -61,4 +61,9 @@
 
 
 
+Errors:
 
+	- Illegal move (something you can't do)
+	- Invalid Command (built instead of build)
+    - general Error (debugging)
+    - Range 
