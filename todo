@@ -58,7 +58,7 @@
     - fix while count game loop
 
 
-
+MAKE DOCUMENTATION in README
 
 
 Errors:
@@ -66,4 +66,5 @@ Errors:
 	- Illegal move (something you can't do)
 	- Invalid Command (built instead of build)
     - general Error (debugging)
-    - Range 
+    - Range (out of range)
+	- 
