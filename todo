@@ -62,6 +62,11 @@ MAKE DOCUMENTATION in README
 
 ncurses 
 
+- Proper terminal display
+- Documentation
+- tidy up function and var names
+- get rid of collectValue
+- change casino.py at the endddddd
 
 Errors:
 
@@ -69,4 +74,4 @@ Errors:
 	- Invalid Command (built instead of build)
     - general Error (debugging)
     - Range (out of range)
-	- 
+	
