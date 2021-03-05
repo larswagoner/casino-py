@@ -123,6 +123,16 @@ def is_digit(strings):
         else:
             return False
 
+def is_in_range(commands, list):
+    commands = [(int(index)) for index in commands]
+    for index in commands:
+        if not((-len(list)) <= index <= (len(list) - 1)):
+            return False
+            break
+    return True
+        
+
+
 
 def check_input(commands, player, possibleActions):
     if commands:
@@ -131,32 +141,18 @@ def check_input(commands, player, possibleActions):
                 return True
             elif commands[0] == possibleActions[1] and len(commands) == 1: # end
                 return True
-            elif commands[0] == possibleActions[2] and len(commands) == 2 and is_digit(commands[1::]): # play
-                if(int(commands[1]) > (len(player.hand) - 1)):
-                    say.buckaroo(player.name)
-                elif(abs(int(commands[1])) > (len(player.hand))):
-                    say.buckaroo(player.name)
-                else:
-                    return True
-            elif commands[0] == possibleActions[3] and len(commands) == 2 and is_digit(commands[1::]): # take
-                if(int(commands[1]) > (len(center.pile) - 1)):
-                    say.buckaroo(player.name)
-                elif(abs(int(commands[1])) > (len(center.pile))):
-                    say.buckaroo(player.name)
-                else:
-                    return True
-            else:
-                for action in possibleActions[4::]: # build, collect and quickTake
-                    if commands[0] == action and len(commands) == 3 and is_digit(commands[1::]):
-                        if (int(commands[1]) or int(commands[2])) > (len(center.pile) - 1):
-                            say.buckaroo(player.name)
-                        elif (abs(int(commands[1])) or abs(int(commands[2]))) > (len(center.pile)):
-                            say.buckaroo(player.name)
-                        else:
-                            return True
+            elif commands[0] == possibleActions[2] and len(commands) == 2 and is_digit(commands[1::]) and is_in_range(commands[1::], player.hand): # play
+                return True
+            elif commands[0] == possibleActions[3] and len(commands) == 2 and is_digit(commands[1::]) and is_in_range(commands[1::], center.pile): # take
+                return True
+            elif commands[0] == possibleActions[4] and len(commands) == 3 and is_digit(commands[1::]) and is_in_range(commands[1::], player.hand): #build
+                return True
+            elif commands[0] == possibleActions[5] and len(commands) == 3 and is_digit(commands[1::]) and is_in_range(commands[1::], player.hand): #collect
+                return True
+            elif commands[0] == possibleActions[6] and len(commands) == 3 and is_digit(commands[1::]) and is_in_range(commands[1::], player.hand) and is_in_range(commands[1::], center.pile): #quick
+                return True
         else:
             return False
-
     else:
         return False
 
