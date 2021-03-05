@@ -1,14 +1,11 @@
 import os
 
-
 class Print:
     def __init__(self):
         self.invalidVar = "you typed an invalid command" #too many commands, typo
         self.rangeVar = "slow down there buckaroo, that index was out of range" # indexing something that's out of range
         self.illegalVar = "illegal move, you cant do that" #play >1, end too soon, invalid collect, build, quick, take.
         self.errorVar = "there was an error" # something went wrong, general error
-        
-
 
     def invalid(self, name):
         print(name + ", " + self.invalidVar)
