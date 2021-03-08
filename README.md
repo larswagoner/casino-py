@@ -1,6 +1,8 @@
-# casino
+# casino python
 
-### Terminal based `game.py` function calls
+Terminal based version of the card game casino, played with up to four players.
+
+### Terminal based game.py function calls
 
 #### Player Initialization and game setup
 First instantiate the number of players playing in the game with their names. 
