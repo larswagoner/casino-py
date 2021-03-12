@@ -3,7 +3,7 @@ import random
 
 ##################
 ##################
-######CLASSES#####
+#####CLASSES######
 ##################
 ##################
 
@@ -14,8 +14,6 @@ class Print:
         self.illegalVar = "illegal move, you cant do that" #play >1, end too soon, invalid collect, build, quick, take.
         self.errorVar = "there was an error" # something went wrong, general error
         
-
-
     def invalid(self, name):
         print(name + ", " + self.invalidVar)
         os.system("say " + name + ", " + self.invalidVar)
@@ -31,7 +29,71 @@ class Print:
     def error(self):
         print(self.errorVar)
         os.system("say " + ", " + self.errorVar)
+    
+    def setup(self):
+        print("ohihi")
+    
+    def instructions(self):
+        print(  '------------------------------------------------',
+                'When it\'s your turn you will be able to see your',
+                'hand and the cards on the table like this:',
+                'Your Cards:',
+                '    12 of heart',
+                '    5 of clubs',
+                '    2 of diamonds',
+                '    9 of spades',
+                'Center',
+                'Built Value: 5',
+                '    5 of diamonds',
+                'Built Value: 11',
+                '    11 of diamonds',
+                'Built Value: 2',
+                '    2 of clubs',
+                'Built Value: 10',
+                '    10 of hearts',
+                '------------------------------------------------',
+                'Examples of possible commands you can do:',
+                '"play 0"      - plays the first card in your hand (12)',
+                '"build 2 3"   - builds the 3rd and last card in the center (2+10)',
+                '"collect -1 -2" - collects the last two piles in the center (2+10)',
+                '"take 0" - moves the first card from the center into your discard pile(5)',
+                sep='\n'
+        )
 
+
+    def printTable(self, player, center):
+        print(f"{player.name}'s Cards: ")
+        for card in player.hand:
+            print(f"        {card.value} of {card.suit}")
+        print('There are %d cards in your discard pile.' % len(player.discard))
+        print("Center:")
+        for pile in center:
+            if pile.isBuilt:
+                print(f"    Built Value: {pile.builtValue}.")
+                for card in pile.pile:
+                    print(f"        {card.value} of {card.suit}")
+            else:
+                print(f"    Collect Value: {pile.builtValue}.")
+                for card in pile.pile:
+                    print(f"        {card.value} of {card.suit}")
+    
+    def results(self, players):
+        ordinals = ['first', 'second', 'third', 'fourth']
+        print(f'The winner is: {players[0].name}! Congratulations! \n')
+        for i in range(len(players)):
+            print(f'\n {players[i].name}, you came in {ordinals[i]} place with {players[i].points} points!',
+            f'You also got {players[i].spades} spades and {players[i].aces} aces')
+        for player in players:
+            if player.bigCasino == 2:
+                print(f'{player.name} got the big casino (10 of diamonds).')
+            if player.littleCasino == 1:
+                print(f'{player.name} got the little casino (2 of spades).')
+        print('Thank you for playing!')
+    
+    def easterEggShow(player):
+        print(f'This is your discard pile have {player.points} points')
+
+            
 
 class Player:
     def __init__(self, name):
@@ -41,34 +103,29 @@ class Player:
         self.cards = 0
         self.spades = 0
         self.aces = 0
-        self.smallCasino = 0
+        self.littleCasino = 0
         self.bigCasino = 0
         self.points = 0
-        
-    def show_points(self):
-        print(self.points)
     
     def count(self):
         self.cards = len(self.discard)
         for card in self.discard:
             if card.suit == 'spades' : self.spades += 1 
             if card.value == 1 : self.aces += 1 
-            if card.suit == 'spades' and card.value == 2 : self.smallCasino = 1 
+            if card.suit == 'spades' and card.value == 2 : self.littleCasino = 1 
             if card.suit == 'diamonds' and card.value == 10 : self.bigCasino = 2 
         
-        self.points += (self.aces + self.smallCasino + self.bigCasino)
+        self.points += (self.aces + self.littleCasino + self.bigCasino)
         return self.cards, self.spades
     
     def handToDiscard(self, indexOne):
-        # print(self.hand.pop(indexOne])
         self.discard.append(self.hand.pop(indexOne))
 
 
 class CenterPile:
     def __init__(self):
         self.pile = [] 
-        self.builtValue = 0 
-        self.collectValue = self.builtValue
+        self.builtValue = 0
         self.isBuilt = True
 
 
@@ -90,22 +147,20 @@ class Center:
 
         
             self.pile[indexTwo].builtValue = newBuiltValue
-            self.pile[indexTwo].collectValue = newBuiltValue
             self.pile.pop(indexOne)
         else:
-            print("NEIN")
+            say.illegal(player.name)
         
 
     def collectCards(self, indexOne, indexTwo):
-        if self.pile[indexOne].collectValue == self.pile[indexTwo].collectValue:
+        if self.pile[indexOne].builtValue == self.pile[indexTwo].builtValue:
             for i in range(len(self.pile[indexOne].pile)):
                 self.pile[indexTwo].pile.append(self.pile[indexOne].pile.pop(0))
 
             self.pile[indexTwo].isBuilt = False
             self.pile.pop(indexOne)
         else:
-            print("NEIN")
-            # say.nein(player.name)
+            say.illegal(player.name)
 
 
 class Card:
@@ -113,7 +168,7 @@ class Card:
         self.suit = suit
         self.value = value
         self.builtValue = value 
-        self.wasLastPlayed = False #at the end of each turn, all of the .wasLastPlayed values should be set to False
+        self.wasLastPlayed = False
 
     def return_card(self):
         return self.suit, self.value
@@ -124,6 +179,7 @@ class Card:
 #GLOBAL FUNCTIONS#
 ##################
 ##################
+
 
 def create_deck():
     suits = ['spades', 'clubs', 'diamonds', 'hearts']
@@ -140,7 +196,6 @@ def deal_to_center(deck, numCards):
         center.pile.append(CenterPile())
         center.pile[-1].pile.append(deck.pop(0))
         center.pile[-1].builtValue = center.pile[-1].pile[0].builtValue
-        center.pile[-1].collectValue = center.pile[-1].pile[0].builtValue
 
 
 def deal_to_player(deck, player, numCards):
@@ -164,10 +219,8 @@ def deal_cards(deck, players):
 
 def move_to_center(player, indexCard):
     center.pile.append(CenterPile())
-    
     center.pile[-1].pile.append(player.hand.pop(indexCard))
     center.pile[-1].builtValue += center.pile[-1].pile[0].builtValue
-    center.pile[-1].collectValue += center.pile[-1].pile[0].builtValue
     center.pile[-1].pile[0].wasLastPlayed = True
     center.pile[-1].pile[0].isBuilt = True
 
@@ -187,9 +240,12 @@ def move_from_center(player, indexCenterPile):
         say.error()
 
 
-def compare_players(players):
+def results(players):
     cardList = []
     spadesList = []
+    playerList = players
+    podium = []
+    
   
     for player in players:
         playerCards, playerSpades = player.count()
@@ -200,8 +256,6 @@ def compare_players(players):
     
     highestSpades = [total for total in spadesList if total == max(spadesList)]
 
-    print(highestCards, highestSpades)
-
     if len(highestCards) == 1:
         cardWinner = players[cardList.index(max(cardList))]
         cardWinner.points += 3 
@@ -209,6 +263,13 @@ def compare_players(players):
     if len(highestSpades) == 1:
         spadesWinner = players[spadesList.index(max(spadesList))]
         spadesWinner.points += 1
+
+    while playerList:
+        i = playerList.index(max(playerList.points))
+        podium.append(playerList[i])
+        players.pop(i)
+
+    return podium
 
 
 def setup():
@@ -224,9 +285,15 @@ def setup():
             players.append(Player(playername))
     else:
         quit()
-            
-    return players, deck, count
+    
+    yuh = ['yes' or 'yea' or 'yeah' or 'y' or 'yep']
+    instruction = input('Do you want instructions? (y/n) ')
+    if instruction in yuh:
+        say.instructions()
+        ready = input('Are you ready to start?')
+        
 
+    return players, deck, count
 
 
 def is_digit(strings, player):
@@ -272,10 +339,10 @@ def check_input(commands, player, possibleActions):
 
 
 def playersTurn(player):
-    printTable(player, center.pile)
+    say.printTable(player, center.pile)
     action = input('Enter the command (play, build, collect, take) and the corresponding indices: ')
     commands = action.split()
-    possibleActions = ['quit', 'end', 'play', 'take', 'build', 'collect', 'quick']
+    possibleActions = ['quit', 'end', 'play', 'take', 'build', 'collect', 'quick', 'show']
 
     temp = 0
     isRunning = True
@@ -315,45 +382,19 @@ def playersTurn(player):
                     player.handToDiscard(int(commands[1]))
                     center.pile[int(commands[2])].isBuilt = False
                     center.pile[int(commands[2])].pile[0].wasLastPlayed = True
-                    move_from_center(player, int(commands[2]))
+                    move_from_center(player, int(commands[1]))
                     temp += 1
+                    
+            elif commands[0] == possibleActions[7]: #show
+                print("asdf")
 
-        printTable(player, center.pile)
+        say.printTable(player, center.pile)
         action = input('Enter (play, build, collect, take, quick or end) and the corresponding indices: ')
         commands = action.split()
     print("Next person's turn...")
 
 
-def prettyPrint(players, centerList):
-    for p in players:
-    
-        print(f"Player: {p.name}")
-        print(f"    Hand:")
-        for card in p.hand:
-            print(f"        {card.value} of {card.suit}")#". %d" % card.builtValue)
-        print(f"    Discard:")
-        for discardCard in p.discard:
-            print(f"        {discardCard.value} of {discardCard.suit}")
-        print(f"-----------------------------")
-    
-    print("Center:")
-    for pile in centerList:
-        print("    Pile:")# % pile.builtValue)
-        for c in pile.pile:
-            print(f"        {c.value} of {c.suit}")
-    print("#################################")
 
-
-def printTable(player, center):
-    print(f"{player.name}'s Cards: ")
-    for card in player.hand:
-        print(f"        {card.value} of {card.suit}")
-    print('There are %d cards in the discard pile.' % len(player.discard))
-    print("Center:")
-    for pile in center:
-        print(f"    Pile: Collect: {pile.collectValue}. Build: {pile.builtValue}.") # % pile.builtValue)
-        for card in pile.pile:
-            print(f"        {card.value} of {card.suit}")
 
 
 ##################
@@ -387,8 +428,8 @@ while count < 49:
 
     count += 1
 
-print('game finished')
-compare_players(players)
-for player in players:
-    player.show_points()
+
+podium = results(players)
+say.results(podium)
+
 

@@ -75,3 +75,11 @@ Errors:
     - general Error (debugging)
     - Range (out of range)
 	
+
+FINAL TOUCHES:
+	- Write README (experience coding, instructions)
+	- [DONE]Counting 
+	- Aesthetic (single quotes, even spacing, change function names, logical ordering of functions)
+	- Everything in Print object
+	- Add to classes.py, functions.py, game.py
+	- Add backdoor input (show score, compliment me )
