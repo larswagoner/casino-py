@@ -80,6 +80,8 @@ FINAL TOUCHES:
 	- Write README (experience coding, instructions)
 	- [DONE]Counting 
 	- Aesthetic (single quotes, even spacing, change function names, logical ordering of functions)
-	- Everything in Print object
+	- Everything in Print object.
+	- Change prompt message.
+	- Make sure all errors display correct message.
 	- Add to classes.py, functions.py, game.py
 	- Add backdoor input (show score, compliment me )
